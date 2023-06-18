@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>CodePen - Word Cloud</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='wordcloud.css') }}">
+  <style>
+    /* Add custom styles for the logout button */
+    .logout-button {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      background-color: #fff;
+      color: #333;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+    }
+
+    .logout-button:hover {
+      background-color: #f0f0f0;
+    }
+  </style>
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<script src="https://www.amcharts.com/lib/4/core.js"></script>
+<script src="https://www.amcharts.com/lib/4/charts.js"></script>
+<script src="https://www.amcharts.com/lib/4/plugins/wordCloud.js"></script>
+<script src="https://www.amcharts.com/lib/4/themes/animated.js"></script>
+<div id="chartdiv"></div>
+<!-- partial -->
+
+<!-- Add the logout button HTML -->
+<a href="/logout" class="logout-button">Logout</a>
+
+<script  src="{{ url_for('static', filename='wordcloud.js') }}"></script>
+</body>
+</html>

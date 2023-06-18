@@ -36,7 +36,6 @@ function validateRegistrationForm() {
     return false;
   }
 
-  // Additional validation for name or any other fields if required
 
   return true;
 }

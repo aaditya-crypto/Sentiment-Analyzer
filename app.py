@@ -15,7 +15,6 @@ import json
 from flask_cors import CORS
 from textblob import TextBlob
 from flask import Flask, jsonify, request
-import boto3
 import random
 from pymongo import MongoClient
 from datetime import datetime
@@ -35,6 +34,14 @@ def page():
 @app.route('/success')
 def ful():
     return render_template('successfulmsg.html')
+
+@app.route('/wordcloud')
+def wordcloud():
+    return render_template('wordcloud.html')
+
+@app.route('/logout')
+def logout():
+    return render_template('index.html')
 
 @app.route('/registration', methods=['POST'])
 def registration():
@@ -73,7 +80,7 @@ def login():
                 'EMAIL_ID': user['EMAIL_ID'],
                 'LOGINDATE_TIME': date
             })
-            return str(data.inserted_id)
+            return render_template('wordcloud.html')
         else:
             error_message = 'Invalid email or password. Please try again.'
             return render_template('index.html', error_message=error_message)
