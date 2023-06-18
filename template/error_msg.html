@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Error</title>
+    <style>
+.error-dialog {
+  position: relative;
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.error-dialog-box {
+  position: relative;
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+  border-radius: 5px;
+  padding: 10px;
+}
+
+.error-dialog-box h2 {
+  margin-top: 0;
+}
+
+.error-dialog-box p {
+  margin-bottom: 0;
+}
+
+.close-button {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  cursor: pointer;
+}
+
+/* Animation */
+@keyframes slideDown {
+  0% {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideUp {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+}
+
+.error-dialog-box {
+  animation: slideDown 0.3s ease-out;
+}
+
+.close-button {
+  animation: slideUp 0.3s ease-out;
+}
+
+.error-dialog-box,
+.close-button {
+  animation-fill-mode: forwards;
+}
+
+    </style>
+</head>
+<body>
+    <div class="error-dialog-box">
+        <span class="close-button" onclick="closeErrorDialog()">&times;</span>
+        <h2>Error</h2>
+        <p>{{ error_message }}</p>
+      </div>
+</body>
+<script>
+    function closeErrorDialog() {
+        var errorDialog = document.querySelector('.error-dialog-box');
+        errorDialog.style.display = 'none';
+    }
+</script>
+</html>
