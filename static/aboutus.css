@@ -1,0 +1,258 @@
+body{
+    font-family: Segoe UI;
+    margin: 0;
+    padding: 0;
+    background: #f7f5ff;
+    margin: 0 120px;
+    font-family: 'Roboto', Arial;
+  }
+  
+root:scrollbar{
+  width: 10px;
+}
+*{
+    margin: 0;
+    padding: 0;
+    text-decoration: none;
+}
+
+/*  -----------   NAVBAR   ----------- */
+.navbar{
+    width: 100%;
+    height: 50px;
+    margin-top: 40px;
+    margin-bottom: 50px;
+
+    display: flex;
+    justify-content: space-between;
+}
+
+.head{
+    font-size: 30px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+.nav{
+    display: flex;
+    align-items: center;
+    gap: 100px;
+}
+
+.nav a{
+    color: black;
+    font-size: 18px;
+
+}
+.nav .contact{
+    display: flex;
+    align-items:center;
+    justify-content: center;
+    width: 130px;
+    height: 50px;
+
+
+    border: 1px solid black;
+    border-radius: 12px;
+    transition: 0.7s;
+}
+.nav a:hover {
+    text-decoration: underline;
+}
+
+
+.nav .contact:hover{
+    background: #f9d8ea;
+    border: 1px dashed black;
+}
+
+/*  -----------   MAİN   ----------- */
+/*  İNFO CARD  */
+
+.info-card{
+    width: 1300px;
+    height: 450px;
+    margin: 0 auto;
+    margin-bottom: 50PX;
+
+    background: #f9d8ea;
+    border-radius: 20px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.info-card1{
+    width: 1300px;
+    height: 450px;
+    margin: 0 auto;
+    margin-bottom: 50PX;
+
+    background: #d8f9f8;
+    border-radius: 20px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.info-card2{
+    width: 1300px;
+    height: 450px;
+    margin: 0 auto;
+    margin-bottom: 50PX;
+
+    background: #f8f9d8;
+    border-radius: 20px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.info-card3{
+    width: 1300px;
+    height: 450px;
+    margin: 0 auto;
+    margin-bottom: 50PX;
+
+    background: #f9e2d8;
+    border-radius: 20px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.info-card4{
+    width: 1300px;
+    height: 450px;
+    margin: 0 auto;
+    margin-bottom: 50PX;
+
+    background: #d8f9db;
+    border-radius: 20px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.info-text-ctn{
+    width: 1000px;
+    height: 300px;
+    /* background: #eee; */
+    margin-left: 100px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.info-head{
+    width: 100%;
+    height: auto;   
+}
+.info-head h1{
+    font-size: 50px;
+    font-weight: bold;
+    color: rgb(0, 0, 0);
+    font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+.info-text{
+    width: 100%;
+    height: auto;
+}
+.info-text p{
+    font-size: 17px;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    color: rgb(58, 58, 58);
+}
+.info-buton{
+    text-align:left;
+    
+}
+.info-buton button{
+    border: none;
+    padding: 15px 47px;
+    border-radius: 5px;
+    background: #9b83e2;
+    color: white;
+    font-weight: bold;
+    font-size: 15px;
+
+    transition: 0.4s;
+}
+
+.info-image{
+    width: 400px;
+    height: 400px;
+    margin-right: 100px;
+}
+.info-image img{
+    width: 500px;
+    height: 400px;
+    mix-blend-mode: darken;
+
+}
+.info-image1{
+    width: 400px;
+    height: 400px;
+    margin-right: 100px;
+
+}
+
+.info-image1 img{
+    width: 500px;
+    height: 400px;
+    mix-blend-mode: darken;
+
+}
+
+.info-image2{
+    width: 400px;
+    height: 400px;
+    margin-right: 100px;
+}
+.info-image2 img{
+    width: 476px;
+    height: 400px;
+    mix-blend-mode: darken;
+}
+
+
+.info-image3{
+    width: 427px;
+    margin-top: -135px;
+    height: 400px;
+    margin-right: 100px;
+}
+.info-image3 img{
+    width: 525px;
+    height: 400px;
+    mix-blend-mode: darken;
+
+}
+/* footer {
+    background-color: #222;
+    color: #fff;
+    font-size: 14px;
+    bottom: 0;
+    position: fixed;
+    left: 0;
+    right: 0;
+    text-align: center;
+    z-index: 999;
+}
+
+footer p {
+    margin: 10px 0;
+}
+
+footer i {
+    color: red;
+}
+
+footer a {
+    color: #3c97bf;
+    text-decoration: none;
+} */
