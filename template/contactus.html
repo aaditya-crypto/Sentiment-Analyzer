@@ -8,6 +8,17 @@
 <link rel='stylesheet' href='https://fonts.googleapis.com/css2?family=Pacifico&amp;family=Quicksand&amp;display=swap'><link rel="stylesheet" href="{{ url_for('static', filename='contactus.css') }}">
 </head>
 <body>
+	<nav class="navbar">
+		<div class="head">
+		  <h1><strong>Contact Us!</strong></h1>
+		</div>
+		<div class="nav">
+		  <a href="/homepage" >Home</a>
+		  <a href="/aboutus" >About Us</a>
+		  <a href="/contact"  >Contact Us</a>
+		  <a href="/reglog" >Login/Signup</a>
+		</div>
+	  </nav>
 <div class="container d-flex justify-content-center align-items-center">
 	<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 790 563" fill="none">
 			<g id="Image">
@@ -306,7 +317,7 @@
 	</svg>
 	
 	<div id="contactForm">
-		<h1 class="title text-center mb-4">Talk to Us</h1>
+		<h1 class="title text-center mb-4">Get in Touch</h1>
 		<form action="/submit_form" method="POST" >
 		  <!-- Name -->
 		  <div class="form-group position-relative">
