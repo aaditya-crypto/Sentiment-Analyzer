@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>About Us</title>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='dashboard.css') }}">
+
+</head>
+<style>
+    /* Add custom styles for the logout button */
+    .logout-button {
+      top: 10px;
+      right: 10px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      background-color: #fff;
+      color: #333;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+    }
+
+    .logout-button:hover {
+      background-color: #f0f0f0;
+    }
+  </style>
+<body>
+<!-- partial:index.partial.html -->
+<nav class="navbar">
+  <div class="head">
+    <h1>SentimentAnalyzerX!</h1>
+  </div>
+  <div class="nav">
+    <a href="/homepage" >Home</a>
+    <a href="/aboutus" >About</a>
+    <a href="/contact"  >Contact Us</a>
+    <a href="/reglog" >Login/Signup</a>
+
+  </div>
+</nav>
+
+<!-- -----------   MAİN   -----------  -->
+<!-- İNFO CARD -->
+<div class="info-card">
+  <div class="info-text-ctn">
+    <div class="info-head">
+      <h1>Get Free <br>Education</h1>
+    </div>
+    <div class="info-text">
+      <p>Get Free Education And high quailty <br>
+        educational system to help you advance in <br>
+        your career, learn a new language by
+      </p>
+    </div>
+    <div class="info-buton">
+      <button>Learn More</button>
+    </div>
+  </div>
+  <div class="info-image">
+    <img src="https://www.seekpng.com/png/detail/71-714263_namaste-png-file-monk-clipart.png" alt="">
+  </div>
+</div>
+
+<!-- CATEGORİES -->
+<div class="categories-container">
+  <div class="categorie-name">
+    <h1>Benefits</h1>
+  </div>
+  <div class="categories">
+    <div class="categorie-grid">
+      <div class="categorie-col" id="col-one">
+        <div class="categorie-image-wrapper">
+          <img src="https://cdn-icons.flaticon.com/png/512/3344/premium/3344156.png?token=exp=1642683289~hmac=eb25c0fca4c5d91de8361023fc2f45d2" alt="">
+        </div>
+        <div class="categories-text-ctn">
+          <div class="ctg-head">
+            <h2>Sports</h2>
+          </div>
+          <div class="ctg-text">
+            <p> Free sports education. This is the first step <br>
+              towars a career in sports writing. You <br>
+              have to be well acquainted with the rules.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="categorie-col" id="col-two">
+        <div class="categorie-image-wrapper">
+          <img src="https://cdn-icons.flaticon.com/png/512/3577/premium/3577837.png?token=exp=1642683214~hmac=e2f9a272c16f01267e4e56f4fa8831a6" alt="">
+        </div>
+        <div class="categories-text-ctn">
+          <div class="ctg-head">
+            <h2>Finance</h2>
+          </div>
+          <div class="ctg-text">
+            <p> Free sports education. This is the first step <br>
+              towars a career in sports writing. You <br>
+              have to be well acquainted with the rules.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="categorie-grid">
+      <div class="categorie-col" id="col-tree">
+        <div class="categorie-image-wrapper">
+          <img src="https://cdn-icons.flaticon.com/png/512/5230/premium/5230784.png?token=exp=1642683138~hmac=4c165b8c51938b619b761ea959e54907" alt="">
+        </div>
+        <div class="categories-text-ctn" >
+          <div class="ctg-head">
+            <h2>Science</h2>
+          </div>
+          <div class="ctg-text">
+            <p> Free sports education. This is the first step <br>
+              towars a career in sports writing. You <br>
+              have to be well acquainted with the rules.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="categorie-col" id="col-four">
+        <div class="categorie-image-wrapper">
+          <img src="https://cdn-icons.flaticon.com/png/512/395/premium/395690.png?token=exp=1642683183~hmac=8c80e873e6182111db3b3df0eaf1426a" alt="">
+        </div>
+        <div class="categories-text-ctn">
+          <div class="ctg-head">
+            <h2>Design</h2>
+          </div>
+          <div class="ctg-text">
+            <p> Free sports education. This is the first step <br>
+              towars a career in sports writing. You <br>
+              have to be well acquainted with the rules.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+<!-- partial -->
+  
+</body>
+</html>

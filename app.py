@@ -21,15 +21,17 @@ from datetime import datetime
 import hashlib
 
 app = Flask(__name__,template_folder="template")
+app.secret_key = 'your_secret_key'
 CORS(app)
 client = pymongo.MongoClient("mongodb://localhost:27017/")
 db = client["PROJECT"]
 collection=db['USER_MASTER']
 collection1=db['LOGIN_TRACK']
+collection2=db['CONTACT_US']
 
 @app.route('/')
 def page():
-    return render_template('index.html')
+    return render_template('dashboard.html')
 
 @app.route('/success')
 def ful():
@@ -41,7 +43,25 @@ def wordcloud():
 
 @app.route('/logout')
 def logout():
+    return render_template('dashboard.html')
+
+@app.route('/reglog')
+def logreg():
     return render_template('index.html')
+
+@app.route('/aboutus')
+def aboutus():
+    return render_template('about_us.html')
+
+@app.route('/homepage')
+def homepage():
+    return render_template('dashboard.html')
+
+@app.route('/contact')
+def contact():
+    return render_template('contactus.html')
+
+
 
 @app.route('/registration', methods=['POST'])
 def registration():
@@ -84,6 +104,22 @@ def login():
         else:
             error_message = 'Invalid email or password. Please try again.'
             return render_template('index.html', error_message=error_message)
+        
+@app.route('/submit_form', methods=['POST'])
+def submit_form():
+    name = request.form['name']
+    email = request.form['email']
+    message = request.form['msg']
+    date=datetime.now()
+    data1 = collection2.insert_one({
+                'USERNAME': name,
+                'MESSAGE': message,
+                'EMAIL_ID':email,
+                'LOGINDATE_TIME': date
+            })
+    print(data1)
+    response = {'status': 'success', 'message': 'Form submitted successfully'}
+    return render_template('formsubmission.html',name=name)
 
 if __name__ == "__main__":
     app.run(debug=True)
