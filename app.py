@@ -1,33 +1,11 @@
-from flask import (
-    Flask,
-    g,
-    redirect,
-    render_template,
-    flash,
-    request,
-    session,
-    url_for,
-    send_file,
-    Response
-)
-import pymongo
-import json
-from flask_cors import CORS
-from textblob import TextBlob
-from flask import Flask, jsonify, request
-import random
-from pymongo import MongoClient
-from datetime import datetime
-import hashlib
+from dependency import *
 
-app = Flask(__name__,template_folder="template")
-app.secret_key = 'your_secret_key'
-CORS(app)
-client = pymongo.MongoClient("mongodb://localhost:27017/")
-db = client["PROJECT"]
-collection=db['USER_MASTER']
-collection1=db['LOGIN_TRACK']
-collection2=db['CONTACT_US']
+login_manager = LoginManager(app)
+app.secret_key = 'Sentiment@Analyzer@2023!!'
+
+class User(UserMixin):
+    def __init__(self, user_id):
+        self.id = user_id
 
 @app.route('/')
 def page():
@@ -42,8 +20,10 @@ def wordcloud():
     return render_template('wordcloud.html')
 
 @app.route('/logout')
+@login_required
 def logout():
-    return render_template('dashboard.html')
+    logout_user()
+    return redirect(url_for('reglog')) 
 
 @app.route('/reglog')
 def logreg():
@@ -62,6 +42,10 @@ def contact():
     return render_template('contactus.html')
 
 
+@login_manager.user_loader
+def load_user(user_id):
+    user_data = collection.find_one({'_id': user_id})
+    return User(user_id)
 
 @app.route('/registration', methods=['POST'])
 def registration():
@@ -94,6 +78,9 @@ def login():
         hashed_password = hashlib.sha256(password.encode()).hexdigest()
         user = collection.find_one({'EMAIL_ID': email, 'PASSWORD': hashed_password})
         if user:
+            session['email'] = email
+            user_obj = User(str(user['_id']))
+            login_user(user_obj)
             data = collection1.insert_one({
                 'USER_ID': user['_id'],
                 'USERNAME': user['USERNAME'],
@@ -120,6 +107,38 @@ def submit_form():
     print(data1)
     response = {'status': 'success', 'message': 'Form submitted successfully'}
     return render_template('formsubmission.html',name=name)
+@app.route('/predictsentimenttext', methods=["POST"])
+@login_required
+def textsentiment():
+    if 'email' not in session:
+        return jsonify({"error": "Unauthorized. Please log in."}), 401
+    text = request.form.get('text')
+    if not text:
+        return jsonify({"error": "Text parameter is missing."}), 400
+    text = re.sub(r"(@\[A-Za-z0-9]+)|([^0-9A-Za-z \t])|(\w+:\/\/\S+)|^rt|http.+?", "", text)
+    analysis = TextBlob(text)
+    score = round(analysis.sentiment.polarity, 2)
+    sentiment = 'Positive' if score > 0 else 'Negative'
+    email = session['email']
+    user = collection.find_one({'EMAIL_ID': email})
+    sentiment_data = {
+        "USER_ID": user['_id'],
+        "TEXT": text,
+        "SENTIMENT_SCORE": score,
+        "SENTIMENT_RESPONSE": sentiment,
+        "SENTIMENT_DATETIME": datetime.now()
+    }
+    collection3.insert_one(sentiment_data)
+    response = {
+        "Score": score,
+        "Sentiment": sentiment,
+        "Text": text,
+        "message": "Data Inserted Successfully"
+    }
+
+    return jsonify(response), 200
+
 
 if __name__ == "__main__":
     app.run(debug=True)
+
