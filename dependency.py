@@ -21,6 +21,10 @@ from pymongo import MongoClient
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user
 from datetime import datetime
 import hashlib
+import speech_recognition as sr
+import webbrowser
+import threading
+
 
 print("Libraries Imported Successfully !!")
 
