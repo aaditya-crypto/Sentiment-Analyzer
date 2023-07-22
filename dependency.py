@@ -13,6 +13,7 @@ from flask import (
 import pymongo
 import json
 import re
+import pandas as pd
 from flask_cors import CORS
 from textblob import TextBlob
 from flask import Flask, jsonify, request
@@ -24,8 +25,12 @@ import hashlib
 import speech_recognition as sr
 import webbrowser
 import threading
-
-
+import docx
+import numpy as np
+import nltk
+from nltk.corpus import stopwords
+nltk.download('punkt')
+nltk.download('stopwords')
 print("Libraries Imported Successfully !!")
 
 app = Flask(__name__,template_folder="template")

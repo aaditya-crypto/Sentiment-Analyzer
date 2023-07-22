@@ -140,40 +140,137 @@ def textsentiment():
 
     return jsonify(response), 200
 
-def process_command(command):
-    if "website" in command:
-        webbrowser.open_new_tab('http://127.0.0.1:5000/')
-    elif "home" in command:
-        webbrowser.open_new_tab('http://127.0.0.1:5000/homepage')
-    elif "about" in command:
-        webbrowser.open_new_tab('http://127.0.0.1:5000/aboutus')
-    elif "contact" in command:
-        webbrowser.open_new_tab('http://127.0.0.1:5000/contact')
-    elif "login" in command:
-        webbrowser.open_new_tab('http://127.0.0.1:5000/reglog')
-    elif "signup" in command:
-        webbrowser.open_new_tab('http://127.0.0.1:5000/reglog')
 
-def recognize_speech():
-    recognizer = sr.Recognizer()
+WORD = "WORD"
+CSV_EXCEL = "CSV/EXCEL"
 
-    with sr.Microphone() as source:
-        print("Say something...")
-        recognizer.adjust_for_ambient_noise(source) 
-        audio = recognizer.listen(source)
-    try:
-        print("Recognizing...")
-        command = recognizer.recognize_google(audio).lower()
-        print("You said:", command)
-        process_command(command)
+@app.route('/predictsentimentfile', methods=["POST"])
+@login_required
+def filesentiment():
+    if 'email' not in session:
+        return jsonify({"error": "Unauthorized. Please log in."}), 401
 
-    except sr.UnknownValueError:
-        print("Could not understand audio.")
-    except sr.RequestError as e:
-        print("Error with the recognition service; {0}".format(e))
+    if 'file' not in request.files:
+        return "No file part in the request", 400
+
+    file = request.files['file']
+    file_upload_time = datetime.now()
+    file_name = file.filename.split('.')[-1].lower()
+
+    if file.filename == '':
+        return "No file selected", 400
+
+    if file_name in ['doc', 'docx']:
+        type = WORD
+        doc = docx.Document(file)
+        full_text = ""
+        for paragraph in doc.paragraphs:
+            full_text += paragraph.text + "\n"
+        full_text = re.sub(r"(@\[A-Za-z0-9]+)|([^0-9A-Za-z \t])|(\w+:\/\/\S+)|^rt|http.+?", "", full_text)
+        analysis = TextBlob(full_text)
+        score = round(analysis.sentiment.polarity, 2)
+        sentiment = 'Positive' if score > 0 else 'Negative'
+        text_tokens = nltk.tokenize.word_tokenize(full_text) 
+        st_word = set(stopwords.words('english')) 
+        tokens_without_sw = [word for word in text_tokens if not word.lower() in st_word]
+        words4 = [w.replace('liked', 'like').replace('relaxed', 'relax').replace('relaxing', 'relax').replace('excitinging', 'excited') for w in tokens_without_sw]
+        zxc = ' '.join(word for word in words4 if len(word) > 3)
+        zxcc = re.sub(r"[^a-zA-Z ]", "", zxc)
+        email = session['email']
+        user = collection.find_one({'EMAIL_ID': email})
+        sentiment_data = {
+            "USER_ID": user['_id'],
+            "FILE_NAME": file.filename,
+            "FILE_TYPE": type,
+            "SENTIMENT_SCORE": score,
+            "SENTIMENT_RESPONSE": sentiment,
+            "FILE_UPLOAD_DATETIME": file_upload_time,
+            "WORDCLOUD": zxcc,
+            "SENTIMENT_DATETIME": datetime.now()
+        }
+        print(sentiment_data)
+        collection3.insert_one(sentiment_data)
+    elif file_name in ['xls', 'xlsx', 'csv']:
+        type = CSV_EXCEL
+        col_name = request.form.get('column_name')
+        data = pd.read_excel(file) if file_name in ['xls', 'xlsx'] else pd.read_csv(file)
+        df = pd.DataFrame(data)
+
+        if col_name not in df.columns:
+            return "Column name not found in the file.", 400
+
+        df['Sentiment_score'] = df[col_name].apply(lambda x: TextBlob(x).sentiment.polarity)
+        
+        df['Label'] = np.where(df['Sentiment_score'] > 0, 'Positive', (np.where(df['Sentiment_score'] < 0, 'Negative', 'Neutral')))
+
+        total = len(df)
+        positive = len(df[df['Label'] == 'Positive'])
+        negative = len(df[df['Label'] == 'Negative'])
+        neutral = len(df[df['Label'] == 'Neutral'])
+
+        positive_percentage = round((positive / total) * 100, 2)
+        negative_percentage = round((negative / total) * 100, 2)
+        neutral_percentage = round((neutral / total) * 100, 2)
+
+        score = {"Positive": positive_percentage, "Negative": negative_percentage, "Neutral": neutral_percentage}
+
+        email = session['email']
+        user = collection.find_one({'EMAIL_ID': email})
+        sentiment_data = {
+            "USER_ID": user['_id'],
+            "FILE_NAME": file.filename,
+            "FILE_TYPE": type,
+            "TOTAL_COMMENTS": total,
+            "POSITIVE_COMMENTS": positive,
+            "NEGATIVE_COMMENTS": negative,
+            "NEUTRAL_COMMENTS": neutral,
+            "SENTIMENT_SCORE": score,
+            "FILE_UPLOAD_DATETIME": file_upload_time,
+            "SENTIMENT_DATETIME": datetime.now()
+        }
+        print(sentiment_data)
+
+        collection3.insert_one(sentiment_data)
+    else:
+        return "Unsupported file format.", 400
+
+    return "File Uploaded Successfully", 200
+
+
+# def process_command(command):
+#     if "website" in command:
+#         webbrowser.open_new_tab('http://127.0.0.1:5000/')
+#     elif "home" in command:
+#         webbrowser.open_new_tab('http://127.0.0.1:5000/homepage')
+#     elif "about" in command:
+#         webbrowser.open_new_tab('http://127.0.0.1:5000/aboutus')
+#     elif "contact" in command:
+#         webbrowser.open_new_tab('http://127.0.0.1:5000/contact')
+#     elif "login" in command:
+#         webbrowser.open_new_tab('http://127.0.0.1:5000/reglog')
+#     elif "signup" in command:
+#         webbrowser.open_new_tab('http://127.0.0.1:5000/reglog')
+
+# def recognize_speech():
+#     recognizer = sr.Recognizer()
+
+#     with sr.Microphone() as source:
+#         print("Say something...")
+#         recognizer.adjust_for_ambient_noise(source) 
+#         audio = recognizer.listen(source)
+#     try:
+#         print("Recognizing...")
+#         command = recognizer.recognize_google(audio).lower()
+#         print("You said:", command)
+#         process_command(command)
+
+#     except sr.UnknownValueError:
+#         print("Could not understand audio.")
+#     except sr.RequestError as e:
+#         print("Error with the recognition service; {0}".format(e))
 
 if __name__ == "__main__":
-    recognize_speech()
+    # recognize_speech()
     app.run(debug=True)
 
 
