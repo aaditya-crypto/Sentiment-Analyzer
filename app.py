@@ -1,6 +1,10 @@
 from dependency import *
 
 login_manager = LoginManager(app)
+@login_manager.user_loader
+def load_user(user_id):
+    user_data = collection.find_one({'_id': user_id})
+    return User(user_id)
 app.secret_key = 'Sentiment@Analyzer@2023!!'
 
 class User(UserMixin):
@@ -10,6 +14,10 @@ class User(UserMixin):
 @app.route('/')
 def page():
     return render_template('dashboard.html')
+
+@app.route('/userpage')
+def userpage():
+    return render_template('userpage.html')
 
 @app.route('/success')
 def ful():
@@ -23,7 +31,7 @@ def wordcloud():
 @login_required
 def logout():
     logout_user()
-    return redirect(url_for('reglog')) 
+    return render_template('dashboard.html') 
 
 @app.route('/reglog')
 def logreg():
@@ -42,10 +50,7 @@ def contact():
     return render_template('contactus.html')
 
 
-@login_manager.user_loader
-def load_user(user_id):
-    user_data = collection.find_one({'_id': user_id})
-    return User(user_id)
+
 
 @app.route('/registration', methods=['POST'])
 def registration():
@@ -67,7 +72,7 @@ def registration():
         }
         collection.insert_one(user_data)
         print(user_data)
-        return render_template('successfulmsg.html',name=name)
+        return render_template('userpage.html',name=name)
 
 @app.route('/login', methods=['GET','POST'])
 def login():
@@ -78,6 +83,7 @@ def login():
         hashed_password = hashlib.sha256(password.encode()).hexdigest()
         user = collection.find_one({'EMAIL_ID': email, 'PASSWORD': hashed_password})
         if user:
+            name=user['USERNAME']
             session['email'] = email
             user_obj = User(str(user['_id']))
             login_user(user_obj)
@@ -87,7 +93,7 @@ def login():
                 'EMAIL_ID': user['EMAIL_ID'],
                 'LOGINDATE_TIME': date
             })
-            return render_template('wordcloud.html')
+            return render_template('userpage.html',name=name)
         else:
             error_message = 'Invalid email or password. Please try again.'
             return render_template('index.html', error_message=error_message)
