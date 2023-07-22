@@ -120,7 +120,10 @@ def textsentiment():
     text = re.sub(r"(@\[A-Za-z0-9]+)|([^0-9A-Za-z \t])|(\w+:\/\/\S+)|^rt|http.+?", "", text)
     analysis = TextBlob(text)
     score = round(analysis.sentiment.polarity, 2)
-    sentiment = 'Positive' if score > 0 else 'Negative'
+    if score > 0:
+        sentiment='Positive'
+    else:
+        sentiment='Negative'
     email = session['email']
     user = collection.find_one({'EMAIL_ID': email})
     sentiment_data = {
@@ -128,6 +131,7 @@ def textsentiment():
         "TEXT": text,
         "SENTIMENT_SCORE": score,
         "SENTIMENT_RESPONSE": sentiment,
+        "FILE_TYPE": "TEXT",
         "SENTIMENT_DATETIME": datetime.now()
     }
     collection3.insert_one(sentiment_data)
@@ -135,6 +139,7 @@ def textsentiment():
         "Score": score,
         "Sentiment": sentiment,
         "Text": text,
+        "FILE_TYPE": "TEXT",
         "message": "Data Inserted Successfully"
     }
 
@@ -190,6 +195,7 @@ def filesentiment():
         }
         print(sentiment_data)
         collection3.insert_one(sentiment_data)
+        temp = {"FILE_TYPE": type,"SENTIMENT_SCORE":score,"SENTIMENT_RESPONSE": sentiment,"WORDCLOUD": zxcc}
     elif file_name in ['xls', 'xlsx', 'csv']:
         type = CSV_EXCEL
         col_name = request.form.get('column_name')
@@ -202,7 +208,7 @@ def filesentiment():
         df['Sentiment_score'] = df[col_name].apply(lambda x: TextBlob(x).sentiment.polarity)
         
         df['Label'] = np.where(df['Sentiment_score'] > 0, 'Positive', (np.where(df['Sentiment_score'] < 0, 'Negative', 'Neutral')))
-
+        
         total = len(df)
         positive = len(df[df['Label'] == 'Positive'])
         negative = len(df[df['Label'] == 'Negative'])
@@ -229,12 +235,20 @@ def filesentiment():
             "SENTIMENT_DATETIME": datetime.now()
         }
         print(sentiment_data)
-
         collection3.insert_one(sentiment_data)
+        df=df[[col_name,'Label']]
+        temp = {"FILE_TYPE": type,
+                "TOTAL_COMMENTS": total, 
+                "POSITIVE_COMMENTS": positive,
+                "NEGATIVE_COMMENTS": negative,
+                "NEUTRAL_COMMENTS": neutral,
+                "SENTIMENT_SCORE": score,
+                "data":df.values.tolist()}
+        df.to_excel(r'FinalFile.xlsx')
     else:
         return "Unsupported file format.", 400
 
-    return "File Uploaded Successfully", 200
+    return json.dumps(temp), 200
 
 
 # def process_command(command):
