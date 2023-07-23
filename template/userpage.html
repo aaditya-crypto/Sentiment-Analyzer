@@ -5,14 +5,13 @@
   <title>SentimentAnalyserX | Dashboard</title>
   <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css'>
 <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css'>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='userpage.css') }}">
-
 </head>
 <body>
 <!-- partial:index.partial.html -->
 <div class="wrapper">
   <div id="content">
-
     <h1><b>Hello </b><span style="color: rgb(235, 89, 89);"><b>{{name}}</b></span> &#128075;</h1>
 
     <div class="container-fluid">
@@ -22,15 +21,16 @@
         </div>
         <div class="card-group">
           <div class="card">
-            <a href=""><i class="fa fa-users" aria-hidden="true"></i></a>
-            <h3>21.2K</h3>
-            <p>Total Followers</p>
+            <!-- Add target="_blank" to open in a new tab -->
+            <a href="https://www.google.com/" target="_blank">
+              <button class="analyse-button text-button">📝 Unleash the Emotion Power of Text 📝</button>
+            </a>
           </div>
-
           <div class="card">
-            <a href=""><i class="fa fa-hand-o-up" aria-hidden="true"></i></a>
-            <h3>1.6K</h3>
-            <p>Impressions</p>
+            <!-- Add target="_blank" to open in a new tab -->
+            <a href="https://www.google.com/" target="_blank">
+              <button class="analyse-button file-button">📂 Explore Emotions through Files 📂</button>
+            </a>
           </div>
         </div>
         <div id="recent-trends">
@@ -38,24 +38,84 @@
         </div>
         <div class="card-group">
           <div class="card">
-            <a href=""><i class="fa fa-users" aria-hidden="true"></i></a>
-            <h3>21.2K</h3>
-            <p>Text Analysis📝🔢</p>
+            <h3>📝</h3>
+            <h3><b>Text Analysed</b></h3>
+            <h4 id="textCount">Loading...</h4>
           </div>
           <div class="card">
-            <a href=""><i class="fa fa-hand-o-up" aria-hidden="true"></i></a>
-            <h3>1.6K</h3>
-            <p>File Analysis📂📊</p>
+            <h3>📂</h3>
+            <h3><b>File Analysed</b></h3>
+            <h4 id="fileCount">Loading...</h4>
           </div>
         </div>
-                           
+        <!-- <h2>📋 "Analytical Insights: <span style="color: rgb(78, 173, 242);"><b>Summary of Analysed Files !</b></span>"</h2> -->
+        <div id="table-section">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>FILE NAME</th>
+                <th>FILE TYPE</th>
+                <th>ANALYSED ON</th>
+                <th>OVERALL SENTIMENT</th>
+              </tr>
+            </thead>
+            <tbody>
+            </tbody>
+          </table>
+        </div>             
       </div>
     </div>
   </div>
   <a href="/logout" class="logout-button"><b>Logout</b></a>
 <!-- partial -->
   <script src='https://cdnjs.cloudflare.com/ajax/libs/highcharts/6.2.0/highcharts.js'></script>
-  <script  src="{{ url_for('static', filename='userpage.js') }}"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    $(document).ready(function() {
+      // Make an AJAX call to the API
+      $.ajax({
+        url: "http://127.0.0.1:5000/userhistorycard",
+        type: "GET",
+        dataType: "json",
+        success: function(data) {
+          // Update the HTML content of the card elements with the received data
+          $("#textCount").text(data.Text);
+          $("#fileCount").text(data.File);
+        },
+        error: function(error) {
+          console.error("Error fetching data from API:", error);
+        }
+      });
+    });
+    $(document).ready(function() {
+  // Make an AJAX call to the API
+  $.ajax({
+    url: "http://127.0.0.1:5000/userhistorytable",
+    type: "GET",
+    dataType: "json",
+    success: function(data) {
+      var tableData = data.data; 
 
+      if (tableData && tableData.length > 0) {
+        var tableBody = $("#table-section tbody");
+
+        // Loop through the data and create table rows
+        tableData.forEach(function(fileData) {
+          var row = $("<tr></tr>");
+
+          fileData.forEach(function(item) {
+            row.append("<td>" + item + "</td>");
+          });
+
+          tableBody.append(row);
+        });
+      }
+    },
+    error: function(error) {
+      console.error("Error fetching data from API:", error);
+    }
+  });
+});
+</script>
 </body>
 </html>

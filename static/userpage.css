@@ -159,3 +159,88 @@ nav ul li {
   box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.06), 0 8px 32px 0 rgba(0, 0, 0, 0.1);
   border-radius: 5px;
 }
+
+/* Common styles for both buttons */
+.analyse-button {
+  color: white; /* White text color */
+  border: none; /* No border */
+  padding: 10px 20px; /* Padding */
+  font-size: 18px; /* Font size */
+  border-radius: 5px; /* Rounded corners */
+  cursor: pointer; /* Cursor on hover */
+  outline: none; /* Remove outline on focus */
+  transition: background-color 0.3s; /* Transition effect on hover */
+}
+
+/* Green background color for the text button */
+.text-button {
+  background-color: #41bac8;
+}
+
+/* Purple background color for the file button */
+.file-button {
+  background-color: #D350DF;
+}
+
+/* Style the button on hover */
+.analyse-button:hover {
+  filter: brightness(85%); /* Slightly darken the button on hover */
+}
+
+/* CSS for the table section */
+#table-section {
+  margin-top: 30px;
+}
+
+/* CSS for the table heading */
+/* #table-section h2 {
+  text-align: center;
+  font-size: 24px;
+  margin-bottom: 20px;
+} */
+
+/* CSS for the table */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.06), 0 8px 32px 0 rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+}
+
+.table:hover {
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2), 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+
+}
+
+/* CSS for the table header */
+.table th {
+  background-color: #f2f2f2;
+  padding: 10px;
+  text-align: center;
+  font-weight: bold;
+  border: 1px solid #191818;
+
+}
+
+/* CSS for the table rows */
+.table td {
+  padding: 10px;
+  text-align: center;
+}
+
+/* CSS for alternate row background color */
+.table tbody tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+/* CSS for table border */
+.table th,
+.table td {
+  border: 1px solid #191818;
+}
+
+/* CSS for table hover effect */
+.table tbody tr:hover {
+  background-color: #e6f7ff;
+  cursor: pointer;
+}
