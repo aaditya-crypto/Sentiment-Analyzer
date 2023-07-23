@@ -40,12 +40,12 @@
           <div class="card">
             <h3>📝</h3>
             <h3><b>Text Analysed</b></h3>
-            <h4 id="textCount">Loading...</h4>
+            <h3 id="textCount">Loading...</h3>
           </div>
           <div class="card">
             <h3>📂</h3>
             <h3><b>File Analysed</b></h3>
-            <h4 id="fileCount">Loading...</h4>
+            <h3 id="fileCount">Loading...</h3>
           </div>
         </div>
         <!-- <h2>📋 "Analytical Insights: <span style="color: rgb(78, 173, 242);"><b>Summary of Analysed Files !</b></span>"</h2> -->
@@ -72,7 +72,7 @@
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script>
     $(document).ready(function() {
-      // Make an AJAX call to the API
+      // Make an AJAX call to the API for card data
       $.ajax({
         url: "http://127.0.0.1:5000/userhistorycard",
         type: "GET",
@@ -83,39 +83,61 @@
           $("#fileCount").text(data.File);
         },
         error: function(error) {
-          console.error("Error fetching data from API:", error);
+          console.error("Error fetching card data from API:", error);
+        }
+      });
+  
+      // Make an AJAX call to the API for table data
+      $.ajax({
+        url: "http://127.0.0.1:5000/userhistorytable",
+        type: "GET",
+        dataType: "json",
+        success: function(data) {
+          var tableData = data.data;
+  
+          if (tableData && tableData.length > 0) {
+            var tableBody = $("#table-section tbody");
+  
+            // Loop through the data and create table rows
+            tableData.forEach(function(fileData) {
+              var row = $("<tr></tr>");
+  
+              fileData.forEach(function(item, index) {
+                // Check if it's the last column ("OVERALL SENTIMENT")
+                if (index === fileData.length - 1) {
+                  var colorClass = ""; // Default color class is empty (white background)
+                  var sentimentText = ""; // Default sentiment text is empty
+  
+                  // Set the color class and sentiment text based on the value
+                  if (item === "Positive") {
+                    colorClass = "positive-bg";
+                    sentimentText = "Positive";
+                  } else if (item === "Negative") {
+                    colorClass = "negative-bg";
+                    sentimentText = "Negative";
+                  } else if (item === "Neutral") {
+                    colorClass = "neutral-bg";
+                    sentimentText = "Neutral";
+                  }
+  
+                  // Append the table cell with the box and text
+                  row.append('<td><div class="sentiment-box ' + colorClass + '">' + sentimentText + '</div></td>');
+                } else {
+                  // For other columns, just append the data without any changes
+                  row.append("<td>" + item + "</td>");
+                }
+              });
+  
+              tableBody.append(row);
+            });
+          }
+        },
+        error: function(error) {
+          console.error("Error fetching table data from API:", error);
         }
       });
     });
-    $(document).ready(function() {
-  // Make an AJAX call to the API
-  $.ajax({
-    url: "http://127.0.0.1:5000/userhistorytable",
-    type: "GET",
-    dataType: "json",
-    success: function(data) {
-      var tableData = data.data; 
-
-      if (tableData && tableData.length > 0) {
-        var tableBody = $("#table-section tbody");
-
-        // Loop through the data and create table rows
-        tableData.forEach(function(fileData) {
-          var row = $("<tr></tr>");
-
-          fileData.forEach(function(item) {
-            row.append("<td>" + item + "</td>");
-          });
-
-          tableBody.append(row);
-        });
-      }
-    },
-    error: function(error) {
-      console.error("Error fetching data from API:", error);
-    }
-  });
-});
-</script>
-</body>
-</html>
+  </script>
+  </body>
+  </html>
+  

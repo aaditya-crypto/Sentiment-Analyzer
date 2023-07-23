@@ -129,8 +129,10 @@ def textsentiment():
     score = round(analysis.sentiment.polarity, 2)
     if score > 0:
         sentiment='Positive'
-    else:
+    elif score<0:
         sentiment='Negative'
+    else:
+        sentiment='Neutral'
     email = session['email']
     user = collection.find_one({'EMAIL_ID': email})
     sentiment_data = {
@@ -183,7 +185,12 @@ def filesentiment():
         full_text = re.sub(r"(@\[A-Za-z0-9]+)|([^0-9A-Za-z \t])|(\w+:\/\/\S+)|^rt|http.+?", "", full_text)
         analysis = TextBlob(full_text)
         score = round(analysis.sentiment.polarity, 2)
-        sentiment = 'Positive' if score > 0 else 'Negative'
+        if score>0:
+            sentiment='Positive'
+        elif score<0:
+            sentiment='Negative'
+        else:
+            sentiment='Neutral'
         text_tokens = nltk.tokenize.word_tokenize(full_text) 
         st_word = set(stopwords.words('english')) 
         tokens_without_sw = [word for word in text_tokens if not word.lower() in st_word]
@@ -363,5 +370,3 @@ def userhistorycard():
 if __name__ == "__main__":
     # recognize_speech()
     app.run(debug=True)
-
-
