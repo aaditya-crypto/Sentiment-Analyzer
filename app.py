@@ -121,6 +121,7 @@ def textsentiment():
     if 'email' not in session:
         return jsonify({"error": "Unauthorized. Please log in."}), 401
     text = request.form.get('text')
+    file_upload_time = datetime.now()
     if not text:
         return jsonify({"error": "Text parameter is missing."}), 400
     text = re.sub(r"(@\[A-Za-z0-9]+)|([^0-9A-Za-z \t])|(\w+:\/\/\S+)|^rt|http.+?", "", text)
@@ -135,9 +136,11 @@ def textsentiment():
     sentiment_data = {
         "USER_ID": user['_id'],
         "TEXT": text,
+        "FILE_NAME":text,
         "SENTIMENT_SCORE": score,
         "SENTIMENT_RESPONSE": sentiment,
         "FILE_TYPE": "TEXT",
+        "FILE_UPLOAD_DATETIME": file_upload_time,
         "SENTIMENT_DATETIME": datetime.now()
     }
     collection3.insert_one(sentiment_data)
@@ -224,6 +227,15 @@ def filesentiment():
         negative_percentage = round((negative / total) * 100, 2)
         neutral_percentage = round((neutral / total) * 100, 2)
 
+        if positive_percentage > negative_percentage and positive_percentage > neutral_percentage:
+            sentiment = 'Positive'
+        elif negative_percentage > positive_percentage and negative_percentage > neutral_percentage:
+            sentiment = 'Negative'
+        elif neutral_percentage > positive_percentage and neutral_percentage > negative_percentage:
+            sentiment = 'Neutral'
+        else:
+            sentiment = 'Neutral'
+
         score = {"Positive": positive_percentage, "Negative": negative_percentage, "Neutral": neutral_percentage}
 
         email = session['email']
@@ -232,6 +244,7 @@ def filesentiment():
             "USER_ID": user['_id'],
             "FILE_NAME": file.filename,
             "FILE_TYPE": type,
+            "SENTIMENT_RESPONSE": sentiment,
             "TOTAL_COMMENTS": total,
             "POSITIVE_COMMENTS": positive,
             "NEGATIVE_COMMENTS": negative,
@@ -256,6 +269,64 @@ def filesentiment():
 
     return json.dumps(temp), 200
 
+
+@app.route('/userhistorytable')
+def userhistorytable():
+    email = session['email']
+    user = collection.find_one({'EMAIL_ID': email})
+    user_id=user['_id']
+    query = [
+    {
+        '$match': {'USER_ID': user_id}
+    },{'$project':{'_id':0,
+                  "FILE_NAME":1,
+                   "FILE_TYPE":1,
+                   "FILE_UPLOAD_DATETIME":1,
+                  "SENTIMENT_RESPONSE":1
+                  }}
+    ]
+    df = pd.DataFrame(list(collection3.aggregate(query)))
+    df['FILE_UPLOAD_DATETIME']=pd.to_datetime(df['FILE_UPLOAD_DATETIME'])
+    df['FILE_UPLOAD_DATETIME']=df['FILE_UPLOAD_DATETIME'].dt.strftime('%b %d,%Y')
+    df=df[['FILE_NAME','FILE_TYPE','FILE_UPLOAD_DATETIME','SENTIMENT_RESPONSE']]
+
+    temp={'data':df.values.tolist()}
+    return json.dumps(temp)
+
+@app.route('/userhistorycard')
+def userhistorycard():
+    email = session['email']
+    user = collection.find_one({'EMAIL_ID': email})
+    user_id = user['_id']
+
+    query = [
+        {
+            '$match': {'USER_ID': user_id}
+        },
+        {
+            "$group": {
+                "_id": {
+                    "$cond": [
+                        { "$in": ["$FILE_TYPE", ["WORD", "CSV/EXCEL"]] },
+                        "FILE",
+                        "TEXT"
+                    ]
+                },
+                "count": { "$sum": 1 }
+            }
+        }
+    ]
+    df = pd.DataFrame(list(collection3.aggregate(query)))
+    if df.empty:
+        temp = {'Text': 0, 'File': 0}
+    else:
+        if 'TEXT' in df['_id'].values and 'FILE' not in df['_id'].values:
+            temp = {'Text': str(df[df['_id'] == 'TEXT']['count'].iloc[0]), 'File': 0}
+        elif 'TEXT' not in df['_id'].values and 'FILE' in df['_id'].values:
+            temp = {'Text': 0, 'File': str(df[df['_id'] == 'FILE']['count'].iloc[0])}
+        else:
+            temp = {'Text': str(df[df['_id'] == 'TEXT']['count'].iloc[0]), 'File': str(df[df['_id'] == 'FILE']['count'].iloc[0])}
+    return json.dumps(temp)
 
 # def process_command(command):
 #     if "website" in command:
