@@ -1,10 +1,12 @@
 from dependency import *
 
 login_manager = LoginManager(app)
+
 @login_manager.user_loader
 def load_user(user_id):
     user_data = collection.find_one({'_id': user_id})
     return User(user_id)
+
 app.secret_key = 'Sentiment@Analyzer@2023!!'
 
 class User(UserMixin):
@@ -33,7 +35,7 @@ def logout():
     logout_user()
     return render_template('dashboard.html') 
 
-@app.route('/reglog')
+@app.route('/LoginSingUp')
 def logreg():
     return render_template('index.html')
 
@@ -55,19 +57,25 @@ def sentimenttext():
     return render_template('textsentiment.html')
 
 
+@app.route('/filesentiment')
+def sentimentfile():
+    return render_template('filesentiment.html')
 
-@app.route('/registration', methods=['POST'])
+
+@app.route('/registration', methods=['POST', 'GET'])
 def registration():
-    name = request.form['name']
-    email = request.form['email']
-    password = request.form['password']
-    date = datetime.now()
-    hashed_password = hashlib.sha256(password.encode()).hexdigest()
-    existing_user = collection.find_one({'EMAIL_ID': email})
-    if existing_user:
-        error_message = 'User with the same email already exists!!'
-        return render_template('index.html', error_message=error_message)
-    else:
+    if request.method == 'POST':
+        # Registration process
+        name = request.form['name']
+        email = request.form['email']
+        password = request.form['password']
+        date = datetime.now()
+        hashed_password = hashlib.sha256(password.encode()).hexdigest()
+        existing_user = collection.find_one({'EMAIL_ID': email})
+        if existing_user:
+            error_message = 'User with the same email already exists!!'
+            return render_template('index.html', error_message=error_message)
+
         user_data = {
             "USERNAME": name,
             "EMAIL_ID": email,
@@ -76,7 +84,43 @@ def registration():
         }
         collection.insert_one(user_data)
         print(user_data)
-        return render_template('userpage.html',name=name)
+
+        # Redirect to a different URL after successful registration
+        return redirect(url_for('registration_success', name=name))
+
+    # For GET requests, show the registration form
+    return render_template('index.html')
+
+
+@app.route('/registration_success')
+def registration_success():
+    name = request.args.get('name')
+    # Render a success page with the user's name
+    return render_template('registration_success.html', name=name)
+
+
+
+# @app.route('/registration', methods=['POST'])
+# def registration():
+#     name = request.form['name']
+#     email = request.form['email']
+#     password = request.form['password']
+#     date = datetime.now()
+#     hashed_password = hashlib.sha256(password.encode()).hexdigest()
+#     existing_user = collection.find_one({'EMAIL_ID': email})
+#     if existing_user:
+#         error_message = 'User with the same email already exists!!'
+#         return render_template('index.html', error_message=error_message)
+#     else:
+#         user_data = {
+#             "USERNAME": name,
+#             "EMAIL_ID": email,
+#             "CREATED_DATE": date,
+#             "PASSWORD": hashed_password
+#         }
+#         collection.insert_one(user_data)
+#         print(user_data)
+#         return render_template('userpage.html',name=name)
 
 @app.route('/login', methods=['GET','POST'])
 def login():
@@ -101,6 +145,7 @@ def login():
         else:
             error_message = 'Invalid email or password. Please try again.'
             return render_template('index.html', error_message=error_message)
+
         
 @app.route('/submit_form', methods=['POST'])
 def submit_form():
@@ -120,7 +165,6 @@ def submit_form():
 
 
 @app.route('/predictsentimenttext', methods=["POST"])
-@login_required
 def textsentiment():
     if 'email' not in session:
         return jsonify({"error": "Unauthorized. Please log in."}), 401
@@ -160,12 +204,10 @@ def textsentiment():
 
     return jsonify(response), 200
 
-
 WORD = "WORD"
 CSV_EXCEL = "CSV/EXCEL"
 
 @app.route('/predictsentimentfile', methods=["POST"])
-@login_required
 def filesentiment():
     if 'email' not in session:
         return jsonify({"error": "Unauthorized. Please log in."}), 401
