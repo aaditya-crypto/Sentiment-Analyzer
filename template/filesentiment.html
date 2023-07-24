@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Text|SentimentAnalyserX</title>
+    <style>
+        body {
+            background-color: #f7f7f7;
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            text-align: center;
+            border: 2px solid #ccc;
+            padding: 20px;
+            max-width: 400px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 24px;
+            color: #333;
+        }
+
+        #inputBox {
+            margin-bottom: 20px;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.7);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 10% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            border-radius: 8px;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: #000;
+        }
+
+        .modal-result {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+
+        .show {
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>📂 Explore Emotions through Files 📂</h1>
+        <div id="inputBox">
+            <input type="file" id="fileInput">
+            <input type="text" id="columnName" placeholder="Enter column name for CSV/Excel">
+            <button onclick="analyzeSentiment()">Analyze Emotion</button>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <div id="modalResult" class="modal-result">
+                <p>Text: <span id="modalText"></span></p>
+                <p>Score: <span id="modalScore"></span></p>
+                <p>Sentiment: <span id="modalSentiment"></span></p>
+                <p>Message: <span id="modalMessage"></span></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function analyzeSentiment() {
+            // const textInput = document.getElementById('inputText');
+            const fileInput = document.getElementById('fileInput');
+            const columnNameInput = document.getElementById('columnName');
+
+            if (!fileInput.files.length) {
+                alert('Please enter text or select a file to analyze.');
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('file', fileInput.files[0]);
+            // formData.append('text', textInput.value.trim());
+
+            // Check if the file is CSV or Excel, then include the column_name
+            if (fileInput.files[0] && (fileInput.files[0].name.endsWith('.csv') || fileInput.files[0].name.endsWith('.xls') || fileInput.files[0].name.endsWith('.xlsx'))) {
+                const colName = columnNameInput.value.trim();
+                if (!colName) {
+                    alert('Please enter the column name for CSV/Excel analysis.');
+                    return;
+                }
+                formData.append('column_name', colName);
+            }
+
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', '/predictsentimentfile', true);
+            xhr.onload = function () {
+                if (xhr.status === 200) {
+                    const response = JSON.parse(xhr.responseText);
+                    displayResult(response);
+                } else {
+                    alert('Error occurred. Please try again later.');
+                }
+            };
+            xhr.send(formData);
+        }
+
+        function displayResult(response) {
+            const modal = document.getElementById('myModal');
+            const modalText = document.getElementById('modalText');
+            const modalScore = document.getElementById('modalScore');
+            const modalSentiment = document.getElementById('modalSentiment');
+            const modalMessage = document.getElementById('modalMessage');
+
+            modalText.textContent = response.FILE_TYPE === "CSV/EXCEL" ? "CSV/Excel Analysis" : "Word Analysis";
+            modalScore.textContent = response.SENTIMENT_SCORE || "";
+            modalSentiment.textContent = response.SENTIMENT_RESPONSE || "";
+            modalMessage.innerHTML = "";
+
+            if (response.FILE_TYPE === "CSV/EXCEL") {
+                let dataTable = "<table>";
+                dataTable += "<tr><th>Comment</th><th>Sentiment</th></tr>";
+
+                response.data.forEach(row => {
+                    dataTable += `<tr><td>${row[0]}</td><td>${row[1]}</td></tr>`;
+                });
+
+                dataTable += "</table>";
+                modalMessage.innerHTML = dataTable;
+            } else if (response.FILE_TYPE === "WORD") {
+                modalMessage.textContent = `Word Cloud: ${response.WORDCLOUD || ""}`;
+            }
+
+            modal.style.display = 'block';
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('myModal');
+            modal.style.display = 'none';
+        }
+    </script>
+</body>
+
+</html>
