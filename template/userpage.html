@@ -1,76 +1,112 @@
 <!DOCTYPE html>
-<html lang="en" >
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>SentimentAnalyserX | Dashboard</title>
-  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css'>
-<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css'>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='userpage.css') }}">
+    <meta charset="UTF-8">
+    <title>SentimentAnalyserX | Dashboard</title>
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css'>
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css'>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='userpage.css') }}">
+    <style>
+        /* ... (previous styles) ... */
+
+        .pagination {
+            margin-top: 20px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .prev-next-button {
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            padding: 8px 16px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 16px;
+            margin-left: 10px;
+        }
+
+        /* Show total pages and current page number */
+        #showingText {
+            color: #555;
+            font-weight: bold;
+            /* margin-right: 10px; */
+            margin-left: 10px;
+            margin-top: 10px;
+            
+        }
+    </style>
 </head>
 <body>
 <!-- partial:index.partial.html -->
 <div class="wrapper">
-  <div id="content">
-    <h1><b>Hello </b><span style="color: rgb(235, 89, 89);"><b>{{name}}</b></span> &#128075;</h1>
+    <div id="content">
+        <h1><b>Hello </b><span style="color: rgb(235, 89, 89);"><b>{{name}}</b></span> &#128075;</h1>
 
-    <div class="container-fluid">
-      <div class="main-content">
-        <div class="main-header">
-          <h2>🔓 "Unlock Your Desires: <span style="color: rgb(21, 221, 228);"><b>Let Us Know What You Wish to Explore Today!</b></span>" </h2>
+        <div class="container-fluid">
+            <div class="main-content">
+                <div class="main-header">
+                    <h2>🔓 "Unlock Your Desires: <span style="color: rgb(21, 221, 228);"><b>Let Us Know What You Wish to Explore Today!</b></span>" </h2>
+                </div>
+                <div class="card-group">
+                    <div class="card">
+                        <!-- Add target="_blank" to open in a new tab -->
+                        <a href="http://127.0.0.1:5000/textsentiment" target="_blank">
+                            <button class="analyse-button text-button">📝 Unleash the Emotion Power of Text 📝</button>
+                        </a>
+                    </div>
+                    <div class="card">
+                        <!-- Add target="_blank" to open in a new tab -->
+                        <a href="https://www.google.com/" target="_blank">
+                            <button class="analyse-button file-button">📂 Explore Emotions through Files 📂</button>
+                        </a>
+                    </div>
+                </div>
+                <div id="recent-trends">
+                    <h2>🗓️ "Your Journey with Us: <span style="color: rgb(211, 80, 223);"><b>A Timeline of Your Website Engagements !</b></span>"</h2>
+                </div>
+                <div class="card-group">
+                    <div class="card">
+                        <h3>📝</h3>
+                        <h3><b>Text Analysed</b></h3>
+                        <h3 id="textCount">Loading...</h3>
+                    </div>
+                    <div class="card">
+                        <h3>📂</h3>
+                        <h3><b>File Analysed</b></h3>
+                        <h3 id="fileCount">Loading...</h3>
+                    </div>
+                </div>
+                <!-- <h2>📋 "Analytical Insights: <span style="color: rgb(78, 173, 242);"><b>Summary of Analysed Files !</b></span>"</h2> -->
+                <div id="table-section">
+                    <table class="table">
+                      <div class="pagination">
+                        <button class="prev-next-button" onclick="previousPage()">Previous</button>
+                        <span id="showingText"></span>
+                        <button class="prev-next-button" onclick="nextPage()">Next</button>
+                      </div>
+                        <thead>
+                        <tr>
+                            <th>FILE NAME</th>
+                            <th>FILE TYPE</th>
+                            <th>ANALYSED ON</th>
+                            <th>OVERALL SENTIMENT</th>
+                        </tr>
+                        </thead>
+                        <tbody id="tableBody">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
-        <div class="card-group">
-          <div class="card">
-            <!-- Add target="_blank" to open in a new tab -->
-            <a href="https://www.google.com/" target="_blank">
-              <button class="analyse-button text-button">📝 Unleash the Emotion Power of Text 📝</button>
-            </a>
-          </div>
-          <div class="card">
-            <!-- Add target="_blank" to open in a new tab -->
-            <a href="https://www.google.com/" target="_blank">
-              <button class="analyse-button file-button">📂 Explore Emotions through Files 📂</button>
-            </a>
-          </div>
-        </div>
-        <div id="recent-trends">
-          <h2>🗓️ "Your Journey with Us: <span style="color: rgb(211, 80, 223);"><b>A Timeline of Your Website Engagements !</b></span>"</h2>
-        </div>
-        <div class="card-group">
-          <div class="card">
-            <h3>📝</h3>
-            <h3><b>Text Analysed</b></h3>
-            <h3 id="textCount">Loading...</h3>
-          </div>
-          <div class="card">
-            <h3>📂</h3>
-            <h3><b>File Analysed</b></h3>
-            <h3 id="fileCount">Loading...</h3>
-          </div>
-        </div>
-        <!-- <h2>📋 "Analytical Insights: <span style="color: rgb(78, 173, 242);"><b>Summary of Analysed Files !</b></span>"</h2> -->
-        <div id="table-section">
-          <table class="table">
-            <thead>
-              <tr>
-                <th>FILE NAME</th>
-                <th>FILE TYPE</th>
-                <th>ANALYSED ON</th>
-                <th>OVERALL SENTIMENT</th>
-              </tr>
-            </thead>
-            <tbody>
-            </tbody>
-          </table>
-        </div>             
-      </div>
     </div>
-  </div>
-  <a href="/logout" class="logout-button"><b>Logout</b></a>
-<!-- partial -->
-  <script src='https://cdnjs.cloudflare.com/ajax/libs/highcharts/6.2.0/highcharts.js'></script>
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script>
+    <a href="/logout" class="logout-button"><b>Logout</b></a>
+    <!-- partial -->
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/highcharts/6.2.0/highcharts.js'></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+
     $(document).ready(function() {
       // Make an AJAX call to the API for card data
       $.ajax({
@@ -86,58 +122,87 @@
           console.error("Error fetching card data from API:", error);
         }
       });
-  
-      // Make an AJAX call to the API for table data
-      $.ajax({
-        url: "http://127.0.0.1:5000/userhistorytable",
-        type: "GET",
-        dataType: "json",
-        success: function(data) {
-          var tableData = data.data;
-  
-          if (tableData && tableData.length > 0) {
-            var tableBody = $("#table-section tbody");
-  
-            // Loop through the data and create table rows
-            tableData.forEach(function(fileData) {
-              var row = $("<tr></tr>");
-  
-              fileData.forEach(function(item, index) {
-                // Check if it's the last column ("OVERALL SENTIMENT")
-                if (index === fileData.length - 1) {
-                  var colorClass = ""; // Default color class is empty (white background)
-                  var sentimentText = ""; // Default sentiment text is empty
-  
-                  // Set the color class and sentiment text based on the value
-                  if (item === "Positive") {
-                    colorClass = "positive-bg";
-                    sentimentText = "Positive";
-                  } else if (item === "Negative") {
-                    colorClass = "negative-bg";
-                    sentimentText = "Negative";
-                  } else if (item === "Neutral") {
-                    colorClass = "neutral-bg";
-                    sentimentText = "Neutral";
-                  }
-  
-                  // Append the table cell with the box and text
-                  row.append('<td><div class="sentiment-box ' + colorClass + '">' + sentimentText + '</div></td>');
-                } else {
-                  // For other columns, just append the data without any changes
-                  row.append("<td>" + item + "</td>");
-                }
-              });
-  
-              tableBody.append(row);
-            });
-          }
-        },
-        error: function(error) {
-          console.error("Error fetching table data from API:", error);
-        }
-      });
     });
-  </script>
-  </body>
-  </html>
-  
+        let currentPage = 1;
+        const rowsPerPage = 10;
+        const tableData = []; // Store the data fetched from the API
+
+        $(document).ready(function () {
+            // Make an AJAX call to the API for table data
+            $.ajax({
+                url: "http://127.0.0.1:5000/userhistorytable",
+                type: "GET",
+                dataType: "json",
+                success: function (data) {
+                    tableData.push(...data.data);
+                    renderTable();
+                },
+                error: function (error) {
+                    console.error("Error fetching table data from API:", error);
+                }
+            });
+        });
+
+        function renderTable() {
+            const startIndex = (currentPage - 1) * rowsPerPage;
+            const endIndex = startIndex + rowsPerPage;
+            const tableBody = $("#tableBody");
+            tableBody.empty();
+
+            for (let i = startIndex; i < endIndex; i++) {
+                if (tableData[i]) {
+                    const fileData = tableData[i];
+                    const row = $("<tr></tr>");
+
+                    fileData.forEach(function (item, index) {
+                        if (index === fileData.length - 1) {
+                            let colorClass = ""; // Default color class is empty (white background)
+                            let sentimentText = ""; // Default sentiment text is empty
+
+                            if (item === "Positive") {
+                                colorClass = "positive-bg";
+                                sentimentText = "Positive";
+                            } else if (item === "Negative") {
+                                colorClass = "negative-bg";
+                                sentimentText = "Negative";
+                            } else if (item === "Neutral") {
+                                colorClass = "neutral-bg";
+                                sentimentText = "Neutral";
+                            }
+
+                            // Append the table cell with the box and text
+                            row.append('<td><div class="sentiment-box ' + colorClass + '">' + sentimentText + '</div></td>');
+                        } else {
+                            // For other columns, just append the data without any changes
+                            row.append("<td>" + item + "</td>");
+                        }
+                    });
+
+                    tableBody.append(row);
+                }
+            }
+
+            // Update the current page number
+            $("#currentPage").text(currentPage);
+            // Show the "Showing X of Y" message
+            const totalPages = Math.ceil(tableData.length / rowsPerPage);
+            $("#showingText").text(`Showing ${currentPage} of ${totalPages}`);
+        }
+
+        function nextPage() {
+            const totalPages = Math.ceil(tableData.length / rowsPerPage);
+            if (currentPage < totalPages) {
+                currentPage++;
+                renderTable();
+            }
+        }
+
+        function previousPage() {
+            if (currentPage > 1) {
+                currentPage--;
+                renderTable();
+            }
+        }
+    </script>
+</body>
+</html>
