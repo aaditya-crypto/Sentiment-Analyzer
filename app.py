@@ -50,6 +50,10 @@ def contact():
     return render_template('contactus.html')
 
 
+@app.route('/textsentiment')
+def sentimenttext():
+    return render_template('textsentiment.html')
+
 
 
 @app.route('/registration', methods=['POST'])
