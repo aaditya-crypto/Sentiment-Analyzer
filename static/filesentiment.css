@@ -1,0 +1,222 @@
+body {
+background-image: url(https://upload.wikimedia.org/wikipedia/commons/4/4a/Wallpaper_de_DyosEL.jpg);
+background-color: #cb6262;
+font-family: 'Poppins', sans-serif;
+display: flex;
+justify-content: center;
+align-items: center;
+height: 100vh;
+margin: 0;
+}
+
+.container {
+text-align: center;
+border: 2px solid #ccc;
+padding: 20px;
+background-color: #fff;
+border-radius: 10px;
+box-shadow: 0 2px 6px rgba(194, 90, 90, 0.2), 0 4px 12px rgba(0, 0, 0, 0.1); 
+width: 633px;
+height: 300px;
+transition: box-shadow 0.3s ease; 
+}
+
+.container:hover {
+box-shadow: 0 6px 14px rgba(0, 0, 0, 0.3), 0 8px 24px rgba(0, 0, 0, 0.2); 
+}
+
+/* h1 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-size: 24px;
+    color: #333;
+    border: 2px solid #9c4e4e; 
+    padding: 10px; 
+    border-radius: 10px; 
+}
+
+.h1:hover {
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.3), 0 8px 24px rgba(0, 0, 0, 0.2); 
+    }
+
+#inputBox {
+margin-bottom: 20px;
+}
+
+#inputBox1{
+    margin-bottom: 20px;
+    }
+
+#inputBox2{
+        margin-bottom: 20px;
+        } */
+
+/* Add styles for inputBox, inputBox1, and inputBox2 */
+#inputBox,
+#inputBox1,
+#inputBox2 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+/* Style for input inside the inputBox elements */
+#inputBox input,
+#inputBox1 input,
+#inputBox2 button {
+    width: 80%;
+    padding: 12px;
+    font-size: 16px;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    background-color: #f7f7f7;
+}
+
+/* Style for button inside the inputBox2 element */
+#inputBox2 button {
+    background-color: #4CAF50;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+/* Hover effect for the button inside inputBox2 element */
+#inputBox2 button:hover {
+    background-color: #45a049;
+}
+
+/* Add some animation effects */
+@keyframes fadeInOut {
+    0% { opacity: 0; transform: translateY(-10px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+/* Updated styles for the h1 element */
+h1 {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    font-size: 24px;
+    color: #333;
+    border: 2px solid #9c4e4e;
+    padding: 12px;
+    border-radius: 10px;
+    background-color: #fff;
+    animation: fadeInOut 0.5s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease;
+}
+
+/* Hover effect for the h1 element */
+h1:hover {
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.3), 0 8px 24px rgba(0, 0, 0, 0.2);
+    animation: pulse 0.3s ease;
+}
+
+
+
+button {
+background-color: #4CAF50;
+color: #fff;
+border: none;
+padding: 10px 20px;
+cursor: pointer;
+border-radius: 4px;
+font-size: 16px;
+}
+
+/* Modal */
+.modal {
+display: none;
+position: fixed;
+z-index: 1;
+left: 0;
+top: 0;
+width: 100%;
+height: 100%;
+overflow: auto;
+background-color: rgba(0, 0, 0, 0.7);
+}
+
+.modal-content {
+background-color: #fefefe;
+margin: 10% auto;
+padding: 20px;
+border: 1px solid #888;
+width: 80%;
+border-radius: 8px;
+}
+
+.close {
+color: #aaa;
+float: right;
+font-size: 28px;
+font-weight: bold;
+cursor: pointer;
+}
+
+.close:hover {
+color: #000;
+}
+
+.modal-result {
+font-size: 18px;
+margin-bottom: 20px;
+}
+
+.show {
+display: block;
+}
+
+/* .loader {
+display: none;
+font-size: 14px;
+color: #555;
+margin-top: 10px;
+} */
+
+/* Add styles for loader circle and percentage */
+.loader-circle {
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #3498db;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    animation: spin 1s linear infinite;
+    margin: 0 auto;
+}
+
+.loader-percentage {
+    font-size: 14px;
+    color: #555;
+    text-align: center;
+    margin-top: 6px;
+}
+
+/* Keyframes for the loader circle animation */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Adjust the loader appearance and position */
+.loader {
+    display: none;
+    text-align: center;
+    margin-top: 20px;
+}
+
+/* Adjust the appearance of the percentage text */
+.loader strong {
+    display: block;
+    margin-top: 10px;
+    font-size: 16px;
+    color: #333;
+}

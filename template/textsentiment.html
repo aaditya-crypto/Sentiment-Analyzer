@@ -3,91 +3,7 @@
 
 <head>
     <title>Text|SentimentAnalyserX</title>
-    <style>
-        body {
-            background-color: #f7f7f7;
-            font-family: 'Poppins', sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-
-        .container {
-            text-align: center;
-            border: 2px solid #ccc;
-            padding: 20px;
-            max-width: 400px;
-            background-color: #fff;
-            border-radius: 10px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        h1 {
-            margin-top: 0;
-            margin-bottom: 20px;
-            font-size: 24px;
-            color: #333;
-        }
-
-        #inputBox {
-            margin-bottom: 20px;
-        }
-
-        button {
-            background-color: #4CAF50;
-            color: #fff;
-            border: none;
-            padding: 10px 20px;
-            cursor: pointer;
-            border-radius: 4px;
-            font-size: 16px;
-        }
-
-        /* Modal */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0, 0, 0, 0.7);
-        }
-
-        .modal-content {
-            background-color: #fefefe;
-            margin: 10% auto;
-            padding: 20px;
-            border: 1px solid #888;
-            width: 80%;
-            border-radius: 8px;
-        }
-
-        .close {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        .close:hover {
-            color: #000;
-        }
-
-        .modal-result {
-            font-size: 18px;
-            margin-bottom: 20px;
-        }
-
-        .show {
-            display: block;
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='textsentiment.css') }}">
 </head>
 
 <body>
@@ -111,44 +27,8 @@
             </div>
         </div>
     </div>
+<script src="{{ url_for('static', filename='textsentiment.js') }}"></script>
 
-    <script>
-        function analyzeSentiment() {
-            const text = document.getElementById('inputText').value;
-            const xhr = new XMLHttpRequest();
-            xhr.open('POST', '/predictsentimenttext', true);
-            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-            xhr.onload = function () {
-                if (xhr.status === 200) {
-                    const response = JSON.parse(xhr.responseText);
-                    showModal(response);
-                } else {
-                    alert('Error occurred. Please try again later.');
-                }
-            };
-            xhr.send(`text=${encodeURIComponent(text)}`);
-        }
-
-        function showModal(response) {
-            const modal = document.getElementById('myModal');
-            const modalText = document.getElementById('modalText');
-            const modalScore = document.getElementById('modalScore');
-            const modalSentiment = document.getElementById('modalSentiment');
-            const modalMessage = document.getElementById('modalMessage');
-
-            modalText.textContent = response.Text;
-            modalScore.textContent = response.Score;
-            modalSentiment.textContent = response.Sentiment;
-            modalMessage.textContent = response.message;
-
-            modal.style.display = 'block';
-        }
-
-        function closeModal() {
-            const modal = document.getElementById('myModal');
-            modal.style.display = 'none';
-        }
-    </script>
 </body>
 
 </html>
