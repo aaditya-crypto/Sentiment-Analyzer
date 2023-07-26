@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>Text|SentimentAnalyserX</title>
+    <title>Text Emotion | SentimentAnalyserX</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='textsentiment.css') }}">
 </head>
 
@@ -11,10 +11,11 @@
         <h1>📝 Unleash the Emotion Power of Text 📝</h1>
         <div id="inputBox">
             <input type="text" id="inputText" placeholder="Enter text">
+        </div>
+        <div>
             <button onclick="analyzeSentiment()">Analyze Emotion</button>
         </div>
     </div>
-
     <!-- Modal -->
     <div id="myModal" class="modal">
         <div class="modal-content">
