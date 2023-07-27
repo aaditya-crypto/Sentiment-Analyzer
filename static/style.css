@@ -5,7 +5,7 @@
 }
 
 body {
-	/* background-image: url('https://cdn-gkenl.nitrocdn.com/uMXnJIMvZJzBKtDYnZeeVwfFXPbPMFBY/assets/images/optimized/rev-93feb00/wp-content/uploads/2021/12/2.jpeg'); */
+    background-image: url(https://getwallpapers.com/wallpaper/full/e/0/b/1242198-emoji-wallpaper-2205x1240-meizu.jpg);
 
 	/* background: #f6f5f7; */
 	display: flex;
@@ -15,6 +15,8 @@ body {
 	font-family: 'Montserrat', sans-serif;
 	height: 100vh;
 	margin: -20px 0 50px;
+	background-size: cover;
+    backdrop-filter: blur(8px);
 }
 
 h1 {

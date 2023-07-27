@@ -53,6 +53,7 @@
         // Set Sentiment Response value
         const sentimentResponse = response.Sentiment;
         modalSentiment.textContent = sentimentResponse;
+        modalSentiment.classList.remove('Positive', 'Negative', 'Neutral');
         modalSentiment.classList.add(sentimentResponse); // Add appropriate class for styling
 
         // Show the modal

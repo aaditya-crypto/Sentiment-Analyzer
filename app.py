@@ -184,6 +184,7 @@ def textsentiment():
     sentiment_data = {
         "USER_ID": user['_id'],
         "TEXT": correct_sentence,
+        "FILTERED TEXT":filtered_words,
         "FILE_NAME": text,
         "SENTIMENT_SCORE": score,
         "SENTIMENT_RESPONSE": sentiment,
