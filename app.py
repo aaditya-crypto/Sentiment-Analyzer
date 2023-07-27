@@ -11,11 +11,15 @@ app.secret_key = 'Sentiment@Analyzer@2023!!'
 
 class User(UserMixin):
     def __init__(self, user_id):
+
         self.id = user_id
+
+nltk.download('stopwords')
+stop_words = set(stopwords.words('english'))
 
 @app.route('/')
 def page():
-    return render_template('dashboard.html')
+    return render_template('about_us.html')
 
 @app.route('/userpage')
 def userpage():
@@ -33,7 +37,7 @@ def wordcloud():
 @login_required
 def logout():
     logout_user()
-    return render_template('dashboard.html') 
+    return render_template('about_us.html') 
 
 @app.route('/LoginSingUp')
 def logreg():
@@ -43,9 +47,6 @@ def logreg():
 def aboutus():
     return render_template('about_us.html')
 
-@app.route('/homepage')
-def homepage():
-    return render_template('dashboard.html')
 
 @app.route('/contact')
 def contact():
@@ -99,29 +100,6 @@ def registration_success():
     return render_template('registration_success.html', name=name)
 
 
-
-# @app.route('/registration', methods=['POST'])
-# def registration():
-#     name = request.form['name']
-#     email = request.form['email']
-#     password = request.form['password']
-#     date = datetime.now()
-#     hashed_password = hashlib.sha256(password.encode()).hexdigest()
-#     existing_user = collection.find_one({'EMAIL_ID': email})
-#     if existing_user:
-#         error_message = 'User with the same email already exists!!'
-#         return render_template('index.html', error_message=error_message)
-#     else:
-#         user_data = {
-#             "USERNAME": name,
-#             "EMAIL_ID": email,
-#             "CREATED_DATE": date,
-#             "PASSWORD": hashed_password
-#         }
-#         collection.insert_one(user_data)
-#         print(user_data)
-#         return render_template('userpage.html',name=name)
-
 @app.route('/login', methods=['GET','POST'])
 def login():
     if request.method == 'POST':
@@ -172,21 +150,41 @@ def textsentiment():
     file_upload_time = datetime.now()
     if not text:
         return jsonify({"error": "Text parameter is missing."}), 400
+    if len(text) > 500:
+        return jsonify({"error": "Text exceeds the maximum limit of 500 characters."}), 400
+
+    # Remove URLs, special characters, and usernames
     text = re.sub(r"(@\[A-Za-z0-9]+)|([^0-9A-Za-z \t])|(\w+:\/\/\S+)|^rt|http.+?", "", text)
-    analysis = TextBlob(text)
+
+    # Convert text to lowercase
+    text = text.lower()
+
+    # Remove stopwords
+    words = text.split()
+    filtered_words = [word for word in words if word not in stop_words]
+    text = ' '.join(filtered_words)
+
+    # Correct any misspellings in the text
+    tx = TextBlob(text)
+    correct_sentence = tx.correct().raw
+
+    # Perform sentiment analysis
+    analysis = TextBlob(correct_sentence)
     score = round(analysis.sentiment.polarity, 2)
+
     if score > 0:
-        sentiment='Positive'
-    elif score<0:
-        sentiment='Negative'
+        sentiment = 'Positive'
+    elif score < 0:
+        sentiment = 'Negative'
     else:
-        sentiment='Neutral'
+        sentiment = 'Neutral'
+
     email = session['email']
     user = collection.find_one({'EMAIL_ID': email})
     sentiment_data = {
         "USER_ID": user['_id'],
-        "TEXT": text,
-        "FILE_NAME":text,
+        "TEXT": correct_sentence,
+        "FILE_NAME": text,
         "SENTIMENT_SCORE": score,
         "SENTIMENT_RESPONSE": sentiment,
         "FILE_TYPE": "TEXT",
@@ -194,13 +192,15 @@ def textsentiment():
         "SENTIMENT_DATETIME": datetime.now()
     }
     collection3.insert_one(sentiment_data)
+    score_percentage = score * 100
+
     response = {
-    
-        "Score": score,
+        "yourtext": text,
+        "Score": str(score_percentage) + " " + "Out Of 100",
         "Sentiment": sentiment,
-        "Text": text,
+        "Text": correct_sentence,
         "FILE_TYPE": "TEXT",
-        "message": "Data Inserted Successfully"
+        "Result_date_time": datetime.now()
     }
 
     return jsonify(response), 200
@@ -342,6 +342,7 @@ def userhistorytable():
     df = pd.DataFrame(list(collection3.aggregate(query)))
     df['FILE_UPLOAD_DATETIME']=pd.to_datetime(df['FILE_UPLOAD_DATETIME'])
     df['FILE_UPLOAD_DATETIME']=df['FILE_UPLOAD_DATETIME'].dt.strftime('%b %d,%Y')
+    df=df.sort_values(by='FILE_UPLOAD_DATETIME',ascending=False)
     df=df[['FILE_NAME','FILE_TYPE','FILE_UPLOAD_DATETIME','SENTIMENT_RESPONSE']]
 
     temp={'data':df.values.tolist()}
