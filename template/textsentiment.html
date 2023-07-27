@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>Text Emotion | SentimentAnalyserX</title>
+    <title>Text Emotions | SentimentAnalyserX</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='textsentiment.css') }}">
 </head>
 
@@ -10,8 +10,10 @@
     <div class="container">
         <h1>📝 Unleash the Emotion Power of Text 📝</h1>
         <div id="inputBox">
-            <input type="text" id="inputText" placeholder="Enter text">
+            <!-- Use textarea instead of input for dynamic input -->
+            <textarea id="inputText" placeholder="Enter your text" maxlength="500"></textarea>
         </div>
+        <div id="charCount">Characters: 0/500</div>
         <div>
             <button onclick="analyzeSentiment()">Analyze Emotion</button>
         </div>
@@ -21,15 +23,45 @@
         <div class="modal-content">
             <span class="close" onclick="closeModal()">&times;</span>
             <div id="modalResult" class="modal-result">
-                <p>Text: <span id="modalText"></span></p>
-                <p>Score: <span id="modalScore"></span></p>
-                <p>Sentiment: <span id="modalSentiment"></span></p>
-                <p>Message: <span id="modalMessage"></span></p>
+                <h2>Your Result</h2>
+                <div id="modalLoader" class="loader"></div>
+
+                <!-- Table to display the result -->
+                <table class="result-table">
+                    <tr>
+                        <td><strong>Features</strong></td>
+                        <td><strong>Response</strong></td>
+                    </tr>
+
+                    <tr>
+                        <td><strong>Text</strong></td>
+                        <td><span id="modalText1"></span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Clean Text</strong></td>
+                        <td><span id="modalText"></span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Sentiment Score</strong></td>
+                        <td><span id="modalScore"></span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Sentiment Response</strong></td>
+                        <td><span id="modalSentiment"></span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Result Generated On</strong></td>
+                        <td><span id="modalTime"></span></td>
+                    </tr>
+                </table>
+                <!-- Footer -->
+                <div class="modal-footer">
+                    <p>© Result by <a href="http://127.0.0.1:5000/aboutus">SentimentAnalyserX</a></p>
+                </div>
             </div>
         </div>
-    </div>
+    </div>  
 <script src="{{ url_for('static', filename='textsentiment.js') }}"></script>
-
 </body>
 
 </html>

@@ -1,14 +1,15 @@
 body {
-    background-image: url(https://upload.wikimedia.org/wikipedia/commons/4/4a/Wallpaper_de_DyosEL.jpg);
-    background-color: #cb6262;
+    background-image: url(https://getwallpapers.com/wallpaper/full/e/0/b/1242198-emoji-wallpaper-2205x1240-meizu.jpg);
+    background-color: #ffffff;
     font-family: 'Poppins', sans-serif;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
     margin: 0;
-    }
-    
+    background-size: cover;
+    backdrop-filter: blur(8px); /* Adjust the value to increase or decrease the blur intensity */
+}
     .container {
     text-align: center;
     border: 2px solid #ccc;
@@ -17,41 +18,13 @@ body {
     border-radius: 10px;
     box-shadow: 0 2px 6px rgba(194, 90, 90, 0.2), 0 4px 12px rgba(0, 0, 0, 0.1); 
     width: 633px;
-    height: 300px;
+    height: 310px;
     transition: box-shadow 0.3s ease; 
     }
     
     .container:hover {
     box-shadow: 0 6px 14px rgba(0, 0, 0, 0.3), 0 8px 24px rgba(0, 0, 0, 0.2); 
     }
-    
-    /* h1 {
-        margin-top: 0;
-        margin-bottom: 20px;
-        font-size: 24px;
-        color: #333;
-        border: 2px solid #9c4e4e; 
-        padding: 10px; 
-        border-radius: 10px; 
-    }
-    
-    .h1:hover {
-        box-shadow: 0 6px 14px rgba(0, 0, 0, 0.3), 0 8px 24px rgba(0, 0, 0, 0.2); 
-        }
-    
-    #inputBox {
-    margin-bottom: 20px;
-    }
-    
-    #inputBox1{
-        margin-bottom: 20px;
-        }
-    
-    #inputBox2{
-            margin-bottom: 20px;
-            } */
-    
-    /* Add styles for inputBox, inputBox1, and inputBox2 */
     #inputBox,
     #inputBox1,
     #inputBox2 {
@@ -62,7 +35,6 @@ body {
         width: 100%;
     }
     
-    /* Style for input inside the inputBox elements */
     #inputBox input,
     #inputBox1 input,
     #inputBox2 button {
@@ -109,7 +81,7 @@ body {
         padding: 12px;
         border-radius: 10px;
         background-color: #fff;
-        animation: fadeInOut 0.5s ease;
+        /* animation: fadeInOut 0.5s ease; */
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         transition: box-shadow 0.3s ease;
     }
@@ -160,7 +132,15 @@ body {
     color: #FF5733;
   }
   
-    
+  #inputText {
+    width: 100%;
+    height: 124px; /* Set the initial height of the text area */
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    resize: vertical; /* Allow vertical resizing */
+  }
     
     button {
     background-color: #4CAF50;
@@ -170,6 +150,7 @@ body {
     cursor: pointer;
     border-radius: 4px;
     font-size: 16px;
+
     }
     
     /* Modal */
@@ -186,24 +167,26 @@ body {
     }
     
     .modal-content {
-    background-color: #fefefe;
-    margin: 10% auto;
-    padding: 20px;
-    border: 1px solid #888;
-    width: 80%;
-    border-radius: 8px;
-    }
+        background-color: #ebeaea;
+        margin: 10% auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 75%;
+        border-radius: 30px;
+        }
     
-    .close {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-    cursor: pointer;
-    }
+        .close {
+            color: #000;
+            float: right;
+            font-size: 35px;
+            font-weight: bolder;
+            cursor: pointer;
+            /* border: 1px solid black; */
+            }
+            
     
     .close:hover {
-    color: #000;
+    color: #ed0606;
     }
     
     .modal-result {
@@ -211,53 +194,105 @@ body {
     margin-bottom: 20px;
     }
     
+    .modal-result h2 {
+        font-size: 24px;
+        margin-bottom: 20px;
+        color: #333;
+        text-align: center;
+    }
+
+
     .show {
     display: block;
     }
     
-    /* .loader {
-    display: none;
-    font-size: 14px;
-    color: #555;
-    margin-top: 10px;
-    } */
+/* Styles for the result table */
+.result-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.result-table th, .result-table td {
+    border: 3px solid #000000;
+    padding: 8px;
+    text-align: left;
+}
+
+.result-table th {
+    background-color: #f2f2f2;
+    font-size: 16px;
+}
+
+.result-table tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.result-table tr:hover {
+    background-color: #ddd;
+}
+
+/* Loader style */
+/* Loader style */
+.loader {
+    border: 4px solid #f3f3f3; /* Light grey */
+    border-top: 4px solid #3498db; /* Blue */
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 2s linear infinite;
+    display: none; /* Hide the loader by default */
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  
     
-    /* Add styles for loader circle and percentage */
-    .loader-circle {
-        border: 4px solid #f3f3f3;
-        border-top: 4px solid #3498db;
-        border-radius: 50%;
-        width: 60px;
-        height: 60px;
-        animation: spin 1s linear infinite;
-        margin: 0 auto;
-    }
-    
-    .loader-percentage {
-        font-size: 14px;
-        color: #555;
-        text-align: center;
-        margin-top: 6px;
-    }
-    
-    /* Keyframes for the loader circle animation */
-    @keyframes spin {
-        0% { transform: rotate(0deg); }
-        100% { transform: rotate(360deg); }
-    }
-    
-    /* Adjust the loader appearance and position */
-    .loader {
-        display: none;
-        text-align: center;
+    .modal-footer {
+        text-align: right;
         margin-top: 20px;
+        font-size: 18px;
+        color: #666; /* Change the color to your desired color */
     }
-    
-    /* Adjust the appearance of the percentage text */
-    .loader strong {
-        display: block;
-        margin-top: 10px;
-        font-size: 16px;
-        color: #333;
-    }
-    
+
+
+    /* Your existing CSS styles here */
+
+/* Styles for the sentiment response box */
+#modalSentiment {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+/* Sentiment Response Colors */
+#modalSentiment.Positive {
+    background-color: #4CAF50; /* Green for positive sentiment */
+    color: #fff;
+}
+
+#modalSentiment.Negative {
+    background-color: #FF5252; /* Red for negative sentiment */
+    color: #fff;
+}
+
+#modalSentiment.Neutral {
+    background-color: #FFC107; /* Yellow for neutral sentiment */
+    color: #000;
+}
+
+
+#charCount{
+    text-align: right;
+    margin-top: 20px;
+    font-size: 14px;
+    color: #666;
+}
+
+button.blurred {
+    filter: blur(900px);
+    pointer-events: none; /* Disable pointer events for the blurred button */
+  }
