@@ -60,7 +60,7 @@ def sentimenttext():
 
 @app.route('/filesentiment')
 def sentimentfile():
-    return render_template('filesentiment.html')
+    return render_template('file.html')
 
 
 @app.route('/registration', methods=['POST', 'GET'])
@@ -384,6 +384,7 @@ def userhistorycard():
             temp = {'Text': str(df[df['_id'] == 'TEXT']['count'].iloc[0]), 'File': str(df[df['_id'] == 'FILE']['count'].iloc[0])}
     return json.dumps(temp)
 
+
 # def process_command(command):
 #     if "website" in command:
 #         webbrowser.open_new_tab('http://127.0.0.1:5000/')
@@ -415,6 +416,7 @@ def userhistorycard():
 #         print("Could not understand audio.")
 #     except sr.RequestError as e:
 #         print("Error with the recognition service; {0}".format(e))
+
 
 if __name__ == "__main__":
     # recognize_speech()

@@ -13,16 +13,10 @@
             <input type="file" id="fileInput">
         </div>
         <div id="inputBox1">
-            <input type="text" id="columnName" placeholder="Enter column name for CSV/Excel">
+            <textarea id="inputText" placeholder="Enter your text" maxlength="500"></textarea>
         </div>
         <div id="inputBox2">
             <button onclick="analyzeSentiment()">Analyze Emotion</button>
-        </div>
-        <div id="loader" class="loader">
-            <div class="loader-circle">
-                <div class="loader-percentage" id="loaderPercentage"></div>
-            </div>
-            <strong>We are analyzing your file....</strong>
         </div>
     </div>
 
@@ -31,6 +25,7 @@
         <div class="modal-content">
             <span class="close" onclick="closeModal()">&times;</span>
             <div id="modalResult" class="modal-result">
+                <h2>Your Result</h2>
                 <p>Text: <span id="modalText"></span></p>
                 <p>Score: <span id="modalScore"></span></p>
                 <p>Sentiment: <span id="modalSentiment"></span></p>
