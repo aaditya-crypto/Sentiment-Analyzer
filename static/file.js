@@ -1,4 +1,3 @@
-
   const uploadArea = document.querySelector('#uploadArea');
   const dropZoon = document.querySelector('#dropZoon');
   const loadingText = document.querySelector('#loadingText');
@@ -88,12 +87,11 @@ toolTipData.innerHTML = [...imagesTypes].join(', .');
             docThumbnail.style.display = 'block';
             previewImage.style.display = 'none';
             excelThumbnail.style.display = 'none';
-          } else if (fileType === 'application/vnd.ms-excel' || fileType === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
+          } else if (fileType === 'application/vnd.ms-excel' || fileType === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' || fileType === 'text/csv') {
             excelThumbnail.style.display = 'block';
             previewImage.style.display = 'none';
             docThumbnail.style.display = 'none';
           }
-
           fileDetails.classList.add('file-details--open');
           uploadedFile.classList.add('uploaded-file--open');
           uploadedFileInfo.classList.add('uploaded-file__info--active');
@@ -142,3 +140,45 @@ toolTipData.innerHTML = [...imagesTypes].join(', .');
     }
   }
 
+
+const analyzeButton = document.querySelector('#analyzeEmotionsBtn');
+analyzeButton.addEventListener('click', function () {
+  const uploadedFileData = fileInput.files[0];
+
+  if (!uploadedFileData) {
+    alert('Please select a file before analyzing.');
+    return;
+  }
+
+  const fileExtension = uploadedFileData.name.split('.').pop().toLowerCase();
+  console.log(fileExtension)
+  let colName;
+  if (['csv', 'xls', 'xlsx'].includes(fileExtension)) {
+    colName = prompt('Please enter the column name for analysis:');
+    if (!colName) {
+      alert('Column name cannot be empty. Please enter a valid column name.');
+      return;
+    }
+  }
+  const formData = new FormData();
+  formData.append('file', uploadedFileData);
+  if (colName) {
+    formData.append('column_name', colName);
+  }
+  fetch('/predictsentimentfile', {
+    method: 'POST',
+    body: formData,
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error('Failed to analyze the file. Please try again.');
+      }
+      return response.json();
+    })
+    .then((data) => {
+      console.log('API Response:', data);
+    })
+    .catch((error) => {
+      console.error('Error:', error.message);
+    });
+});

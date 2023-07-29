@@ -86,17 +86,13 @@ def registration():
         collection.insert_one(user_data)
         print(user_data)
 
-        # Redirect to a different URL after successful registration
         return redirect(url_for('registration_success', name=name))
-
-    # For GET requests, show the registration form
     return render_template('index.html')
 
 
 @app.route('/registration_success')
 def registration_success():
     name = request.args.get('name')
-    # Render a success page with the user's name
     return render_template('registration_success.html', name=name)
 
 

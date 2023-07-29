@@ -8,7 +8,7 @@ body {
     height: 100vh;
     margin: 0;
     background-size: cover;
-    backdrop-filter: blur(8px); /* Adjust the value to increase or decrease the blur intensity */
+    backdrop-filter: blur(10px); /* Adjust the value to increase or decrease the blur intensity */
 }
     .container {
     text-align: center;
