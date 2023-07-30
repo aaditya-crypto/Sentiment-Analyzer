@@ -14,11 +14,11 @@
     "image/jpeg",
     "image/png",
     "image/gif",
-    "application/msword",  // doc
-    "application/vnd.ms-excel", // xls
-    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", // xlsx
-    "text/csv", // csv
-    "application/vnd.openxmlformats-officedocument.wordprocessingml.document", // docx
+    "application/msword",  
+    "application/vnd.ms-excel", 
+    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", 
+    "text/csv",
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document", 
   ];
   const imagesTypes = [
     "doc",
@@ -29,17 +29,14 @@
 toolTipData.innerHTML = [...imagesTypes].join(', .');
   const docThumbnail = document.querySelector('#docThumbnail');
   const excelThumbnail = document.querySelector('#excelThumbnail');
-
   dropZoon.addEventListener('dragover', function (event) {
     event.preventDefault();
-
     dropZoon.classList.add('drop-zoon--over');
   });
 
   dropZoon.addEventListener('dragleave', function (event) {
     dropZoon.classList.remove('drop-zoon--over');
   });
-
   dropZoon.addEventListener('drop', function (event) {
     event.preventDefault();
 
@@ -106,10 +103,8 @@ toolTipData.innerHTML = [...imagesTypes].join(', .');
       fileReader.readAsDataURL(file);
     }
   }
-
   function progressMove() {
     let counter = 0;
-
     setTimeout(() => {
       let counterIncrease = setInterval(() => {
         if (counter === 100) {
@@ -122,7 +117,6 @@ toolTipData.innerHTML = [...imagesTypes].join(', .');
       }, 100);
     }, 600);
   }
-
   function fileTypeValidation(fileType) {
     return validFileTypes.includes(fileType);
   }
@@ -139,8 +133,6 @@ toolTipData.innerHTML = [...imagesTypes].join(', .');
       return false;
     }
   }
-
-
 const analyzeButton = document.querySelector('#analyzeEmotionsBtn');
 analyzeButton.addEventListener('click', function () {
   const uploadedFileData = fileInput.files[0];
@@ -181,4 +173,18 @@ analyzeButton.addEventListener('click', function () {
     .catch((error) => {
       console.error('Error:', error.message);
     });
+});
+const modal = document.getElementById('modal');
+const closeButton = document.querySelector('.close');
+analyzeButton.addEventListener('click', () => {
+  modal.style.display = 'block';
+});
+closeButton.addEventListener('click', () => {
+  modal.style.display = 'none';
+});
+
+window.addEventListener('click', (event) => {
+  if (event.target === modal) {
+    modal.style.display = 'none';
+  }
 });

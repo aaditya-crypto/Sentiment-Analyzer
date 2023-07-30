@@ -44,6 +44,17 @@
     <div>
         <button id="analyzeEmotionsBtn" class="analyze-emotions-button" style="display: none;">Analyze Emotions</button>
     </div>
+    <div id="modal" class="modal">
+      <div class="modal-content">
+          <span class="close">&times;</span>
+          <h2>Your Result</h2>
+          <p id="emotionResult">Emotion analysis results will be displayed here.</p>
+          <div class="modal-footer">
+            <p>© Result by <a href="http://127.0.0.1:5000/aboutus">SentimentAnalyserX</a></p>
+        </div>
+      </div>
+
+  </div>
   </div>
   <script src="{{ url_for('static', filename='file.js') }}"></script>
 </html>

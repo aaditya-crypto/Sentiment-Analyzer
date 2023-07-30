@@ -148,23 +148,13 @@ def textsentiment():
         return jsonify({"error": "Text parameter is missing."}), 400
     if len(text) > 500:
         return jsonify({"error": "Text exceeds the maximum limit of 500 characters."}), 400
-
-    # Remove URLs, special characters, and usernames
     text = re.sub(r"(@\[A-Za-z0-9]+)|([^0-9A-Za-z \t])|(\w+:\/\/\S+)|^rt|http.+?", "", text)
-
-    # Convert text to lowercase
     text = text.lower()
-
-    # Remove stopwords
     words = text.split()
     filtered_words = [word for word in words if word not in stop_words]
     text = ' '.join(filtered_words)
-
-    # Correct any misspellings in the text
     tx = TextBlob(text)
     correct_sentence = tx.correct().raw
-
-    # Perform sentiment analysis
     analysis = TextBlob(correct_sentence)
     score = round(analysis.sentiment.polarity, 2)
 
@@ -255,15 +245,38 @@ def filesentiment():
         }
         print(sentiment_data)
         collection3.insert_one(sentiment_data)
-        temp = {"FILE_TYPE": type,"SENTIMENT_SCORE":score,"SENTIMENT_RESPONSE": sentiment,"WORDCLOUD": zxcc}
+        temp = {"SENTIMENT_SCORE":score,"SENTIMENT_RESPONSE": sentiment,"WORDCLOUD": zxcc}
     elif file_name in ['xls', 'xlsx', 'csv']:
         type = CSV_EXCEL
         col_name = request.form.get('column_name')
         data = pd.read_excel(file) if file_name in ['xls', 'xlsx'] else pd.read_csv(file)
         df = pd.DataFrame(data)
-
         if col_name not in df.columns:
             return "Column name not found in the file.", 400
+        comment_list=df[col_name].values.tolist()
+        newtexttoken=[]
+        for i in comment_list:
+            text_tokens = nltk.tokenize.word_tokenize(i)
+            newtexttoken.append(text_tokens)
+        newlist=[]
+        for i in newtexttoken:
+            for z in i:
+                newlist.append(z.lower())
+        st_word=stopwords.words('english')
+        tokens_without_sw= [word for word in newlist if not word in st_word]
+        token5=[]
+        for sentence in tokens_without_sw:
+            text3 = sentence.split('ing')    
+            for i in text3:
+                token5.append(i)
+        words = [w.replace('liked', 'like') for w in token5]
+        words2 = [w.replace('relaxed', 'relax') for w in words]
+        words3 = [w.replace('relaxing', 'relax') for w in words2]
+        words4 = [w.replace('excitinging', 'excited') for w in words3]
+        zxc=""
+        xcvv=[x for x in words4 if len(x)>3]
+        zxc=' '.join(word for word in xcvv)
+        zxcc=re.sub(r"[^a-zA-Z ]", "", zxc)
 
         df['Sentiment_score'] = df[col_name].apply(lambda x: TextBlob(x).sentiment.polarity)
         
@@ -302,18 +315,21 @@ def filesentiment():
             "NEUTRAL_COMMENTS": neutral,
             "SENTIMENT_SCORE": score,
             "FILE_UPLOAD_DATETIME": file_upload_time,
-            "SENTIMENT_DATETIME": datetime.now()
+            "SENTIMENT_DATETIME": datetime.now(),
+            "WORDCLOUD":zxcc
         }
         print(sentiment_data)
         collection3.insert_one(sentiment_data)
         df=df[[col_name,'Label']]
         temp = {"FILE_TYPE": type,
+                "SENTIMENT_RESPONSE": sentiment,
                 "TOTAL_COMMENTS": total, 
                 "POSITIVE_COMMENTS": positive,
                 "NEGATIVE_COMMENTS": negative,
                 "NEUTRAL_COMMENTS": neutral,
                 "SENTIMENT_SCORE": score,
-                "data":df.values.tolist()}
+                "data":df.values.tolist(),
+                "WORDCLOUD":zxcc}
         df.to_excel(r'FinalFile.xlsx')
     else:
         return "Unsupported file format.", 400
