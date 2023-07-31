@@ -245,7 +245,7 @@ def filesentiment():
         }
         print(sentiment_data)
         collection3.insert_one(sentiment_data)
-        temp = {"SENTIMENT_SCORE":score,"SENTIMENT_RESPONSE": sentiment,"WORDCLOUD": zxcc}
+        temp = {"FILE_TYPE":type,"SENTIMENT_SCORE":score,"SENTIMENT_RESPONSE": sentiment,"WORDCLOUD": zxcc,"SENTIMENT_DATETIME": datetime.now()}
     elif file_name in ['xls', 'xlsx', 'csv']:
         type = CSV_EXCEL
         col_name = request.form.get('column_name')
@@ -321,7 +321,18 @@ def filesentiment():
         print(sentiment_data)
         collection3.insert_one(sentiment_data)
         df=df[[col_name,'Label']]
-        temp = {"FILE_TYPE": type,
+        if "export" in request.args:
+            try:
+                csv = df.to_csv(index=False)
+                return Response (
+                    csv,
+                    mimetype="text/csv",
+                    headers={"Content-disposition":
+                        "attachment; filename=SentimentFile.csv"})
+            except:
+                return jsonify("Unauthorized Access")    
+        else:
+            temp = {"FILE_TYPE": type,
                 "SENTIMENT_RESPONSE": sentiment,
                 "TOTAL_COMMENTS": total, 
                 "POSITIVE_COMMENTS": positive,
@@ -329,13 +340,10 @@ def filesentiment():
                 "NEUTRAL_COMMENTS": neutral,
                 "SENTIMENT_SCORE": score,
                 "data":df.values.tolist(),
+                "SENTIMENT_DATETIME": datetime.now(),
                 "WORDCLOUD":zxcc}
-        df.to_excel(r'FinalFile.xlsx')
-    else:
-        return "Unsupported file format.", 400
 
-    return json.dumps(temp), 200
-
+    return jsonify(temp), 200
 
 @app.route('/userhistorytable')
 def userhistorytable():
@@ -349,15 +357,15 @@ def userhistorytable():
                   "FILE_NAME":1,
                    "FILE_TYPE":1,
                    "FILE_UPLOAD_DATETIME":1,
-                  "SENTIMENT_RESPONSE":1
+                  "SENTIMENT_RESPONSE":1,
+                  "SENTIMENT_SCORE":1
                   }}
     ]
     df = pd.DataFrame(list(collection3.aggregate(query)))
     df['FILE_UPLOAD_DATETIME']=pd.to_datetime(df['FILE_UPLOAD_DATETIME'])
     df['FILE_UPLOAD_DATETIME']=df['FILE_UPLOAD_DATETIME'].dt.strftime('%b %d,%Y')
     df=df.sort_values(by='FILE_UPLOAD_DATETIME',ascending=False)
-    df=df[['FILE_NAME','FILE_TYPE','FILE_UPLOAD_DATETIME','SENTIMENT_RESPONSE']]
-
+    df=df[['FILE_NAME','FILE_TYPE','FILE_UPLOAD_DATETIME','SENTIMENT_RESPONSE','SENTIMENT_SCORE']]
     temp={'data':df.values.tolist()}
     return json.dumps(temp)
 

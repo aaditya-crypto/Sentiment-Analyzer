@@ -35,10 +35,7 @@
     }
 
     function showModal(response) {
-        // Get the modal element by its ID
         const modal = document.getElementById('myModal');
-
-        // Clear existing contents in the modal before updating
         const modalText1 = document.getElementById('modalText1');
         const modalText = document.getElementById('modalText');
         const modalScore = document.getElementById('modalScore');
@@ -49,14 +46,10 @@
         modalText.textContent = response.Text;
         modalScore.textContent = response.Score;
         modalTime.textContent = response.Result_date_time;
-
-        // Set Sentiment Response value
         const sentimentResponse = response.Sentiment;
         modalSentiment.textContent = sentimentResponse;
         modalSentiment.classList.remove('Positive', 'Negative', 'Neutral');
-        modalSentiment.classList.add(sentimentResponse); // Add appropriate class for styling
-
-        // Show the modal
+        modalSentiment.classList.add(sentimentResponse);
         modal.style.display = 'block';
     }
 

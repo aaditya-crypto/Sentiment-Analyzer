@@ -92,6 +92,7 @@
                             <th>FILE TYPE</th>
                             <th>ANALYSED ON</th>
                             <th>OVERALL SENTIMENT</th>
+                            <th>SENTIMENT SCORE</th>
                         </tr>
                         </thead>
                         <tbody id="tableBody">
@@ -106,103 +107,127 @@
     <script src='https://cdnjs.cloudflare.com/ajax/libs/highcharts/6.2.0/highcharts.js'></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-
-    $(document).ready(function() {
-      // Make an AJAX call to the API for card data
-      $.ajax({
-        url: "http://127.0.0.1:5000/userhistorycard",
-        type: "GET",
-        dataType: "json",
-        success: function(data) {
-          // Update the HTML content of the card elements with the received data
-          $("#textCount").text(data.Text);
-          $("#fileCount").text(data.File);
-        },
-        error: function(error) {
-          console.error("Error fetching card data from API:", error);
-        }
-      });
-    });
+        $(document).ready(function() {
+          // Make an AJAX call to the API for card data
+          $.ajax({
+            url: "http://127.0.0.1:5000/userhistorycard",
+            type: "GET",
+            dataType: "json",
+            success: function(data) {
+              // Update the HTML content of the card elements with the received data
+              $("#textCount").text(data.Text);
+              $("#fileCount").text(data.File);
+            },
+            error: function(error) {
+              console.error("Error fetching card data from API:", error);
+            }
+          });
+        });
+      
         let currentPage = 1;
         const rowsPerPage = 10;
         const tableData = []; // Store the data fetched from the API
-
-        $(document).ready(function () {
-            // Make an AJAX call to the API for table data
-            $.ajax({
-                url: "http://127.0.0.1:5000/userhistorytable",
-                type: "GET",
-                dataType: "json",
-                success: function (data) {
-                    tableData.push(...data.data);
-                    renderTable();
-                },
-                error: function (error) {
-                    console.error("Error fetching table data from API:", error);
-                }
-            });
+      
+        $(document).ready(function() {
+          // Make an AJAX call to the API for table data
+          $.ajax({
+            url: "http://127.0.0.1:5000/userhistorytable",
+            type: "GET",
+            dataType: "json",
+            success: function(data) {
+              tableData.push(...data.data);
+              renderTable();
+            },
+            error: function(error) {
+              console.error("Error fetching table data from API:", error);
+            }
+          });
         });
-
+      
         function renderTable() {
-            const startIndex = (currentPage - 1) * rowsPerPage;
-            const endIndex = startIndex + rowsPerPage;
-            const tableBody = $("#tableBody");
-            tableBody.empty();
-
-            for (let i = startIndex; i < endIndex; i++) {
-                if (tableData[i]) {
-                    const fileData = tableData[i];
-                    const row = $("<tr></tr>");
-
-                    fileData.forEach(function (item, index) {
-                        if (index === fileData.length - 1) {
-                            let colorClass = "";
-                            let sentimentText = ""; 
-
-                            if (item === "Positive") {
-                                colorClass = "positive-bg";
-                                sentimentText = "Positive";
-                            } else if (item === "Negative") {
-                                colorClass = "negative-bg";
-                                sentimentText = "Negative";
-                            } else if (item === "Neutral") {
-                                colorClass = "neutral-bg";
-                                sentimentText = "Neutral";
-                            }
-
-                            // Append the table cell with the box and text
-                            row.append('<td><div class="sentiment-box ' + colorClass + '">' + sentimentText + '</div></td>');
-                        } else {
-                            // For other columns, just append the data without any changes
-                            row.append("<td>" + item + "</td>");
-                        }
-                    });
-
-                    tableBody.append(row);
+          const startIndex = (currentPage - 1) * rowsPerPage;
+          const endIndex = startIndex + rowsPerPage;
+          const tableBody = $("#tableBody");
+          tableBody.empty();
+      
+          for (let i = startIndex; i < endIndex; i++) {
+            if (tableData[i]) {
+              const fileData = tableData[i];
+              const row = $("<tr></tr>");
+      
+              fileData.forEach(function(item, index) {
+                if (index === fileData.length - 2) {
+                  let colorClass = "";
+                  let sentimentText = "";
+      
+                  if (typeof item === "object") {
+                    const positiveScore = Math.round(item.Positive);
+                    const negativeScore = Math.round(item.Negative);
+                    const neutralScore = Math.round(item.Neutral);
+      
+                    // Build a string with sentiment scores
+                    const scoresString = `Positive: ${positiveScore}, Negative: ${negativeScore}, Neutral: ${neutralScore}`;
+                    row.append('<td><div class="score-box">' + scoresString + '</div></td>');
+      
+                    // Determine the overall sentiment and apply appropriate background color
+                    if (positiveScore > negativeScore && positiveScore > neutralScore) {
+                      colorClass = "positive-bg";
+                      sentimentText = "Positive";
+                    } else if (negativeScore > positiveScore && negativeScore > neutralScore) {
+                      colorClass = "negative-bg";
+                      sentimentText = "Negative";
+                    } else if (neutralScore > positiveScore && neutralScore > negativeScore) {
+                      colorClass = "neutral-bg";
+                      sentimentText = "Neutral";
+                    }
+                  } else {
+                    // For non-object sentiment values (Positive, Negative, Neutral), handle as before
+                    if (item === "Positive") {
+                      colorClass = "positive-bg";
+                      sentimentText = "Positive";
+                    } else if (item === "Negative") {
+                      colorClass = "negative-bg";
+                      sentimentText = "Negative";
+                    } else if (item === "Neutral") {
+                      colorClass = "neutral-bg";
+                      sentimentText = "Neutral";
+                    }
+      
+                    // Append the table cell with the box and text
+                    row.append('<td><div class="sentiment-box ' + colorClass + '">' + sentimentText + '</div></td>');
+                  }
+                } else {
+                  row.append("<td>" + item + "</td>");
                 }
+              });
+      
+              tableBody.append(row);
             }
-
-            // Update the current page number
-            $("#currentPage").text(currentPage);
-            // Show the "Showing X of Y" message
-            const totalPages = Math.ceil(tableData.length / rowsPerPage);
-            $("#showingText").text(`Showing ${currentPage} of ${totalPages}`);
+          }
+      
+          // Update the current page number
+          $("#currentPage").text(currentPage);
+          // Show the "Showing X of Y" message
+          const totalPages = Math.ceil(tableData.length / rowsPerPage);
+          $("#showingText").text(`Page ${currentPage} of ${totalPages}`);
         }
-
+      
         function nextPage() {
-            const totalPages = Math.ceil(tableData.length / rowsPerPage);
-            if (currentPage < totalPages) {
-                currentPage++;
-                renderTable();
-            }
+          const totalPages = Math.ceil(tableData.length / rowsPerPage);
+          if (currentPage < totalPages) {
+            currentPage++;
+            renderTable();
+          }
         }
-
+      
         function previousPage() {
-            if (currentPage > 1) {
-                currentPage--;
-                renderTable();
-            }
+          if (currentPage > 1) {
+            currentPage--;
+            renderTable();
+          }
         }
-    </script>
+      </script>
+      
+         
 </body>
 </html>
