@@ -405,39 +405,6 @@ def userhistorycard():
     return json.dumps(temp)
 
 
-# def process_command(command):
-#     if "website" in command:
-#         webbrowser.open_new_tab('http://127.0.0.1:5000/')
-#     elif "home" in command:
-#         webbrowser.open_new_tab('http://127.0.0.1:5000/homepage')
-#     elif "about" in command:
-#         webbrowser.open_new_tab('http://127.0.0.1:5000/aboutus')
-#     elif "contact" in command:
-#         webbrowser.open_new_tab('http://127.0.0.1:5000/contact')
-#     elif "login" in command:
-#         webbrowser.open_new_tab('http://127.0.0.1:5000/reglog')
-#     elif "signup" in command:
-#         webbrowser.open_new_tab('http://127.0.0.1:5000/reglog')
-
-# def recognize_speech():
-#     recognizer = sr.Recognizer()
-
-#     with sr.Microphone() as source:
-#         print("Say something...")
-#         recognizer.adjust_for_ambient_noise(source) 
-#         audio = recognizer.listen(source)
-#     try:
-#         print("Recognizing...")
-#         command = recognizer.recognize_google(audio).lower()
-#         print("You said:", command)
-#         process_command(command)
-
-#     except sr.UnknownValueError:
-#         print("Could not understand audio.")
-#     except sr.RequestError as e:
-#         print("Error with the recognition service; {0}".format(e))
-
-
 if __name__ == "__main__":
     # recognize_speech()
     app.run(debug=True)
