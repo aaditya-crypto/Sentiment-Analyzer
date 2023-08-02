@@ -177,7 +177,7 @@ analyzeButton.addEventListener('click', function () {
       modal.style.display = 'block';
     })
     .catch((error) => {
-      console.error('Error:', error.message);
+      alert('Error:', error.message);
     });
 });
 
@@ -227,16 +227,17 @@ function displaySentimentResult(data) {
         <td>${data.SENTIMENT_RESPONSE}</td>
       </tr>
       <tr>
-      <td><strong>Result Generated On</strong></td>
-      <td>${data.SENTIMENT_DATETIME}</td>
-    </tr>
+        <td><strong>Result Generated On</strong></td>
+        <td>${data.SENTIMENT_DATETIME}</td>
+      </tr>
     `;
     sentimentResult.innerHTML = '';
     sentimentResult.appendChild(table);
-    const downloadLink = document.createElement('b');
-    downloadLink.href = "?export=True";
-    downloadLink.textContent = "Download CSV";
-    sentimentResult.appendChild(downloadLink);
+    // const downloadLink = document.createElement('a');
+    // downloadLink.href = "?export=1";
+    // downloadLink.textContent = "Download CSV";
+    // downloadLink.setAttribute("download", "SentimentFile.csv");
+    // sentimentResult.appendChild(downloadLink);
     
   } else if (data.FILE_TYPE === "WORD") {
     const table = document.createElement('table');
@@ -254,8 +255,8 @@ function displaySentimentResult(data) {
         <td>${data.SENTIMENT_RESPONSE}</td>
       </tr>
       <tr>
-      <td><strong>Result Generated On</strong></td>
-      <td>${data.SENTIMENT_DATETIME}</td>
+        <td><strong>Result Generated On</strong></td>
+        <td>${data.SENTIMENT_DATETIME}</td>
       </tr>
     `;
     sentimentResult.innerHTML = '';

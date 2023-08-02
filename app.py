@@ -195,7 +195,7 @@ def textsentiment():
 WORD = "WORD"
 CSV_EXCEL = "CSV/EXCEL"
 
-@app.route('/predictsentimentfile', methods=["POST"])
+@app.route('/predictsentimentfile', methods=["POST","GET"])
 def filesentiment():
     if 'email' not in session:
         return jsonify({"error": "Unauthorized. Please log in."}), 401
@@ -252,7 +252,8 @@ def filesentiment():
         data = pd.read_excel(file) if file_name in ['xls', 'xlsx'] else pd.read_csv(file)
         df = pd.DataFrame(data)
         if col_name not in df.columns:
-            return "Column name not found in the file.", 400
+            temp="Column name not found in the file."
+            return temp
         comment_list=df[col_name].values.tolist()
         newtexttoken=[]
         for i in comment_list:
@@ -304,6 +305,8 @@ def filesentiment():
 
         email = session['email']
         user = collection.find_one({'EMAIL_ID': email})
+        download_link = request.base_url + "?export=1"
+
         sentiment_data = {
             "USER_ID": user['_id'],
             "FILE_NAME": file.filename,
@@ -324,13 +327,13 @@ def filesentiment():
         if "export" in request.args:
             try:
                 csv = df.to_csv(index=False)
-                return Response (
-                    csv,
-                    mimetype="text/csv",
-                    headers={"Content-disposition":
-                        "attachment; filename=SentimentFile.csv"})
+                print(csv)
+                response = Response(csv, content_type="text/csv")
+                response.headers["Content-Disposition"] = "attachment; filename=SentimentFile.csv"
+                print("Download request handled")
+                return response
             except:
-                return jsonify("Unauthorized Access")    
+                return jsonify("Unauthorized Access")
         else:
             temp = {"FILE_TYPE": type,
                 "SENTIMENT_RESPONSE": sentiment,
@@ -341,7 +344,8 @@ def filesentiment():
                 "SENTIMENT_SCORE": score,
                 "data":df.values.tolist(),
                 "SENTIMENT_DATETIME": datetime.now(),
-                "WORDCLOUD":zxcc}
+                "WORDCLOUD":zxcc,
+                "DOWNLOAD_LINK":download_link}
 
     return jsonify(temp), 200
 
