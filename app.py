@@ -172,7 +172,7 @@ def textsentiment():
         "TEXT": correct_sentence,
         "FILTERED TEXT":filtered_words,
         "FILE_NAME": text,
-        "SENTIMENT_SCORE": score,
+        "SENTIMENT_SCORE": score*100,
         "SENTIMENT_RESPONSE": sentiment,
         "FILE_TYPE": "TEXT",
         "FILE_UPLOAD_DATETIME": file_upload_time,
@@ -237,7 +237,7 @@ def filesentiment():
             "USER_ID": user['_id'],
             "FILE_NAME": file.filename,
             "FILE_TYPE": type,
-            "SENTIMENT_SCORE": score,
+            "SENTIMENT_SCORE": score*100,
             "SENTIMENT_RESPONSE": sentiment,
             "FILE_UPLOAD_DATETIME": file_upload_time,
             "WORDCLOUD": zxcc,
@@ -245,7 +245,7 @@ def filesentiment():
         }
         print(sentiment_data)
         collection3.insert_one(sentiment_data)
-        temp = {"FILE_TYPE":type,"SENTIMENT_SCORE":score,"SENTIMENT_RESPONSE": sentiment,"WORDCLOUD": zxcc,"SENTIMENT_DATETIME": datetime.now()}
+        temp = {"FILE_TYPE":type,"SENTIMENT_SCORE":score*100,"SENTIMENT_RESPONSE": sentiment,"WORDCLOUD": zxcc,"SENTIMENT_DATETIME": datetime.now()}
     elif file_name in ['xls', 'xlsx', 'csv']:
         type = CSV_EXCEL
         col_name = request.form.get('column_name')
@@ -305,8 +305,6 @@ def filesentiment():
 
         email = session['email']
         user = collection.find_one({'EMAIL_ID': email})
-        download_link = request.base_url + "?export=1"
-
         sentiment_data = {
             "USER_ID": user['_id'],
             "FILE_NAME": file.filename,
@@ -344,8 +342,7 @@ def filesentiment():
                 "SENTIMENT_SCORE": score,
                 "data":df.values.tolist(),
                 "SENTIMENT_DATETIME": datetime.now(),
-                "WORDCLOUD":zxcc,
-                "DOWNLOAD_LINK":download_link}
+                "WORDCLOUD":zxcc}
 
     return jsonify(temp), 200
 
