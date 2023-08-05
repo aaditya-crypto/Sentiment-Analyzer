@@ -196,10 +196,13 @@ window.addEventListener('click', (event) => {
     modal.style.display = 'none';
   }
 });
-
+let apiResponseData;
 function displaySentimentResult(data) {
   const sentimentResult = document.getElementById('sentimentResult');
   if (data.FILE_TYPE === "CSV/EXCEL") {
+    apiResponseData = data.data1;
+    console.log("Data")
+    console.log(apiResponseData)
     const table = document.createElement('table');
     table.innerHTML = `
       <tr>
@@ -233,12 +236,8 @@ function displaySentimentResult(data) {
     `;
     sentimentResult.innerHTML = '';
     sentimentResult.appendChild(table);
-    // const downloadLink = document.createElement('a');
-    // downloadLink.href = "?export=1";
-    // downloadLink.textContent = "Download CSV";
-    // downloadLink.setAttribute("download", "SentimentFile.csv");
-    // sentimentResult.appendChild(downloadLink);
-    
+    const showAnalyzedFileBtn = document.getElementById('showAnalyzedFileBtn');
+    showAnalyzedFileBtn.style.display = 'block';
   } else if (data.FILE_TYPE === "WORD") {
     const table = document.createElement('table');
     table.innerHTML = `
@@ -266,3 +265,53 @@ function displaySentimentResult(data) {
   }
 }
 
+showAnalyzedFileBtn.addEventListener('click', function () {
+  const table = document.createElement('table');
+  table.innerHTML = `
+    <tr>
+      <th>Comments</th>
+      <th>Sentiment</th>
+    </tr>
+  `;
+
+  for (const item of apiResponseData) {
+    const row = table.insertRow();
+    const commentsCell = row.insertCell();
+    const sentimentCell = row.insertCell();
+    commentsCell.textContent = item[0];
+    sentimentCell.textContent = item[1];
+  }
+
+  const tableContainer = document.getElementById('tableContainer');
+  tableContainer.innerHTML = '';
+  
+  tableContainer.appendChild(table);
+
+  const tableModal = document.getElementById('tableModal');
+  tableModal.style.display = 'block';
+});
+
+const tableModal = document.getElementById('tableModal');
+const closeTableModalButton = tableModal.querySelector('.close1');
+closeTableModalButton.addEventListener('click', function () {
+  tableModal.style.display = 'none';
+});
+
+const downloadButton = document.querySelector('.export');
+downloadButton.addEventListener('click', function () {
+  const table = document.querySelector('#tableContainer table');
+  const rows = table.querySelectorAll('tr');
+
+  const wb = XLSX.utils.book_new();
+  const ws = XLSX.utils.table_to_sheet(table);
+
+  XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+  const excelFile = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+  const blob = new Blob([excelFile], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+
+  const downloadLink = document.createElement('a');
+  downloadLink.href = URL.createObjectURL(blob);
+  downloadLink.download = 'AnalyzedFile.xlsx';
+  downloadLink.click();
+});

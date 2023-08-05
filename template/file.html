@@ -49,12 +49,20 @@
           <span class="close">&times;</span>
           <h2>Your Result</h2>
           <p id="sentimentResult">Sentiment analysis results will be displayed here.</p>
+          <button id="showAnalyzedFileBtn" class="show-analyzed-file-btn" style="display: none;">Show Analyzed File</button>
           <div class="modal-footer">
             <p>© Result by <a href="http://127.0.0.1:5000/aboutus">SentimentAnalyserX</a></p>
-        </div>
+          </div>
       </div>
-
   </div>
+  <div id="tableModal" class="modal">
+    <button class="close1">Close</button>
+    <button class="export">Download</button>
+    <div id="tableContainer"></div>
+  </div>
+  <a id="csvDownloadLink" style="display: none;"></a>
   </div>
   <script src="{{ url_for('static', filename='file.js') }}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
+
 </html>
