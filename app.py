@@ -340,7 +340,7 @@ def filesentiment():
                 "NEGATIVE_COMMENTS": negative,
                 "NEUTRAL_COMMENTS": neutral,
                 "SENTIMENT_SCORE": score,
-                "data":df.values.tolist(),
+                "data1":df.values.tolist(),
                 "SENTIMENT_DATETIME": datetime.now(),
                 "WORDCLOUD":zxcc}
 
