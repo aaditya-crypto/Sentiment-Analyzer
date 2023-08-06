@@ -89,7 +89,6 @@ def registration():
         return redirect(url_for('registration_success', name=name))
     return render_template('index.html')
 
-
 @app.route('/registration_success')
 def registration_success():
     name = request.args.get('name')
@@ -179,7 +178,7 @@ def textsentiment():
         "SENTIMENT_DATETIME": datetime.now()
     }
     collection3.insert_one(sentiment_data)
-    score_percentage = score * 100
+    score_percentage = round((score * 100),2)
 
     response = {
         "yourtext": text,
@@ -358,15 +357,16 @@ def userhistorytable():
                   "FILE_NAME":1,
                    "FILE_TYPE":1,
                    "FILE_UPLOAD_DATETIME":1,
-                  "SENTIMENT_RESPONSE":1,
-                  "SENTIMENT_SCORE":1
+                   "SENTIMENT_SCORE":1,
+                  "SENTIMENT_RESPONSE":1
+                  
                   }}
     ]
     df = pd.DataFrame(list(collection3.aggregate(query)))
     df['FILE_UPLOAD_DATETIME']=pd.to_datetime(df['FILE_UPLOAD_DATETIME'])
     df['FILE_UPLOAD_DATETIME']=df['FILE_UPLOAD_DATETIME'].dt.strftime('%b %d,%Y')
+    df=df[['FILE_NAME','FILE_TYPE','FILE_UPLOAD_DATETIME','SENTIMENT_RESPONSE']]
     df=df.sort_values(by='FILE_UPLOAD_DATETIME',ascending=False)
-    df=df[['FILE_NAME','FILE_TYPE','FILE_UPLOAD_DATETIME','SENTIMENT_RESPONSE','SENTIMENT_SCORE']]
     temp={'data':df.values.tolist()}
     return json.dumps(temp)
 
@@ -407,5 +407,4 @@ def userhistorycard():
 
 
 if __name__ == "__main__":
-    # recognize_speech()
     app.run(debug=True)
