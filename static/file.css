@@ -47,10 +47,10 @@
   body {
     margin: 0;
     padding: 0;
-    background-image: url(https://getwallpapers.com/wallpaper/full/e/0/b/1242198-emoji-wallpaper-2205x1240-meizu.jpg);
+    background-image: url(https://cdn.dribbble.com/users/113062/screenshots/2812589/bots.gif);
     background-color: var(--clr-light);
     background-size: cover;
-    backdrop-filter: blur(12px);
+    backdrop-filter: blur(4px);
     color: var(--clr-black);
     font-family: 'Poppins', sans-serif;
     font-size: 1.125rem;

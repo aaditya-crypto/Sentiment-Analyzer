@@ -33,11 +33,13 @@ h2{
 }
 
 body {
+  background-image: url(https://images.saymedia-content.com/.image/t_share/MTk0NTIwMDQ4MzU2ODI4Nzgy/how-to-create-cool-website-backgrounds-the-ultimate-guide.gif);
   background-color: #F4F7FC;
   width: 100%;
   height: 100vh;
   font-family: "Open Sans", sans-serif;
-}
+  backdrop-filter: blur(3px);
+  }
 
 ::-webkit-scrollbar {
   width: 5px;
@@ -48,7 +50,6 @@ body {
   border-radius: 10px;
 }
 
-/* Handle */
 ::-webkit-scrollbar-thumb {
   background: gray;
   border-radius: 10px;
@@ -102,7 +103,6 @@ nav ul li {
   padding: 10px;
 }
 
-/** Main Content*/
 #content .main-content {
   margin: 10px;
   padding: 10px;
@@ -121,8 +121,9 @@ nav ul li {
   cursor: pointer;
   padding-left: 14px;
 }
-
 #content .main-content .card-group .card {
+  background-image: url(https://cdn.dribbble.com/users/113062/screenshots/2812589/bots.gif);
+  background-size: cover;
   width: 200px;
   height: 200px;
   display: flex;
@@ -133,7 +134,6 @@ nav ul li {
   border-radius: 5px;
   margin: 10px;
 }
-
 #content .main-content .card-group .card:hover {
   box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2), 0 8px 32px 0 rgba(0, 0, 0, 0.3);
 }
@@ -160,46 +160,34 @@ nav ul li {
   border-radius: 5px;
 }
 
-/* Common styles for both buttons */
 .analyse-button {
-  color: white; /* White text color */
-  border: none; /* No border */
-  padding: 10px 20px; /* Padding */
-  font-size: 18px; /* Font size */
-  border-radius: 5px; /* Rounded corners */
-  cursor: pointer; /* Cursor on hover */
-  outline: none; /* Remove outline on focus */
-  transition: background-color 0.3s; /* Transition effect on hover */
+  color: white; 
+  border: none; 
+  padding: 10px 20px;
+  font-size: 18px; 
+  border-radius: 5px; 
+  cursor: pointer; 
+  outline: none; 
+  transition: background-color 0.3s; 
 }
 
-/* Green background color for the text button */
 .text-button {
   background-color: #41bac8;
 }
 
-/* Purple background color for the file button */
 .file-button {
   background-color: #D350DF;
 }
 
-/* Style the button on hover */
 .analyse-button:hover {
-  filter: brightness(85%); /* Slightly darken the button on hover */
+  filter: brightness(85%);
 }
 
-/* CSS for the table section */
 #table-section {
   margin-top: 30px;
 }
 
-/* CSS for the table heading */
-/* #table-section h2 {
-  text-align: center;
-  font-size: 24px;
-  margin-bottom: 20px;
-} */
 
-/* CSS for the table */
 .table {
   width: 100%;
   border-collapse: collapse;
@@ -211,7 +199,6 @@ nav ul li {
   box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2), 0 8px 32px 0 rgba(0, 0, 0, 0.3);
 
 }
-/* CSS for the table header */
 .table th {
   background-color: #f2f2f2;
   padding: 10px;
@@ -220,24 +207,20 @@ nav ul li {
   border: 1px solid #191818;
 
 }
-/* CSS for the table rows */
 .table td {
   padding: 10px;
   text-align: center;
 }
 
-/* CSS for alternate row background color */
 .table tbody tr:nth-child(even) {
   background-color: #f2f2f2;
 }
 
-/* CSS for table border */
 .table th,
 .table td {
   border: 1px solid #191818;
 }
 
-/* CSS for table hover effect */
 .table tbody tr:hover {
   background-color: #e6f7ff;
   cursor: pointer;
