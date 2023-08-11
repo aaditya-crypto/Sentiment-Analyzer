@@ -25,11 +25,6 @@ To get started with SentimentAnalyzerX, follow these steps:
 4. **File Analysis**: Utilize the "File Analysis" option to upload WORD, CSV, or EXCEL files for in-depth sentiment insights.
 5. **Data Management**: Easily access and manage your analyzed data through the platform's user-friendly interface.
 
-## Demo Video
-
-![SentimentAnalyzerX Demo](https://your-demo-video-url.com)
-
-Watch the demo video to see SentimentAnalyzerX in action! Gain a clear understanding of how to use the tool's features and explore its capabilities.
 
 ## Use Cases
 
