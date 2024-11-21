@@ -7,7 +7,7 @@ def load_user(user_id):
     user_data = collection.find_one({'_id': user_id})
     return User(user_id)
 
-app.secret_key = 'Sentiment@Analyzer@2023!!'
+app.secret_key = 'Sentiment@Analyzer@2024!!'
 
 class User(UserMixin):
     def __init__(self, user_id):

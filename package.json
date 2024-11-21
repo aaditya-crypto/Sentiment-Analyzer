@@ -1,0 +1,12 @@
+{
+  "name": "sentimentanalyzerx",
+  "version": "1.0.0",
+  "description": "SentimentAnalyzerX is a cutting-edge web-based sentiment analysis application that empowers users to analyze the sentiment of text data. This application utilizes a robust tech stack, including HTML, CSS, JavaScript, Python, and MongoDB, to provide a comprehensive sentiment analysis solution. By seamlessly integrating the TextBlob library, SentimentAnalyzerX offers accurate sentiment classification into positive, negative, or neutral categories. Users are required to register, ensuring their data is securely stored in a MongoDB database for easy access and management.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
